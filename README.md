@@ -1,2 +1,2 @@
 # Emoticode
-A programming for Gen-Z
+A programming language for Gen-Z
