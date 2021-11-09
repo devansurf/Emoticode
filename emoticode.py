@@ -4,9 +4,15 @@ import sys
 
 #-- Lexical Analysis --
 
-DEBUG = False
+DEBUG = True
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 #Convert inputs into tokens, run logic and compare valid syntax
+reserved = {
+    'if' : 'IF',
+    'then' : 'THEN',
+    'else' : 'ELSE',
+    'while' : 'WHILE',
+}
 tokens = [
     'INT',
     'FLOAT',
@@ -18,9 +24,8 @@ tokens = [
     'EQUALS',
     'LPAREN',
     'RPAREN',
-    'COMMENT',
-    'NEWLINE'
-]
+    'PRINT',
+]+ list(reserved.values())
 #PLY looks for the the syntax 't_' to register what a token will look like
 
 # 'r' is for raw strings
@@ -32,6 +37,7 @@ t_DIVIDE = r'\/'
 t_EQUALS = r'\='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_PRINT = r'\🖨️'
 
 t_ignore = r' '
 
@@ -50,11 +56,10 @@ def t_INT(t):
     t.value = int(t.value)
     return t
 
-
 def t_NAME(t):
     #Regular expression, variable name has to start with a character that is not a number
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = 'NAME'
+    t.type = reserved.get(t.value,'NAME')    # Check for reserved words
     return t
 
 def t_COMMENT(t):
@@ -82,13 +87,18 @@ precedence = (
 #Start of parser Tree
 def p_emoticode(p):
     '''
-    calc : expression
+    emoti : expression
          | var_assign
+         | print
          | empty
     '''
-    val = run(p[1])
-    if val is not None:
-        print(val)
+    run(p[1])
+
+def p_print(p):
+    '''
+    print : PRINT LPAREN expression RPAREN
+    '''
+    p[0] = ('print', p[3])
 
 def p_var_assign(p):
     '''
@@ -155,6 +165,9 @@ def run(p):
             return run(p[1]) * run (p[2])
         elif p[0] == '/':
             return run(p[1]) / run (p[2])
+        elif p[0] == 'print':
+            return print(run(p[1]))
+
         elif p[0] == '=':
             env[p[1]] = run(p[2])
             if DEBUG:
