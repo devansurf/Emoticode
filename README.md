@@ -1,2 +1,2 @@
 # Emoticode
-An unintuitive programming language for targeted towards Gen-Z
+An unintuitive programming language targeted towards Gen-Z
