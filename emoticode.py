@@ -4,6 +4,8 @@ import sys
 
 #-- Lexical Analysis --
 
+DEBUG = False
+prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 #Convert inputs into tokens, run logic and compare valid syntax
 tokens = [
     'INT',
@@ -15,7 +17,9 @@ tokens = [
     'MULTIPLY',
     'EQUALS',
     'LPAREN',
-    'RPAREN'
+    'RPAREN',
+    'COMMENT',
+    'NEWLINE'
 ]
 #PLY looks for the the syntax 't_' to register what a token will look like
 
@@ -53,6 +57,15 @@ def t_NAME(t):
     t.type = 'NAME'
     return t
 
+def t_COMMENT(t):
+     r'\💬.*'
+     pass
+     # No return value. Token discarded
+
+def t_NEWLINE(t):
+     r'\n+'
+     t.lexer.lineno += len(t.value)
+
 def t_error(t):
     print("Illegal characters!")
     t.lexer.skip(1)
@@ -73,7 +86,9 @@ def p_emoticode(p):
          | var_assign
          | empty
     '''
-    print(run(p[1]))
+    val = run(p[1])
+    if val is not None:
+        print(val)
 
 def p_var_assign(p):
     '''
@@ -142,7 +157,8 @@ def run(p):
             return run(p[1]) / run (p[2])
         elif p[0] == '=':
             env[p[1]] = run(p[2])
-            print(env)
+            if DEBUG:
+                print(env)
         elif p[0] == 'var':
             if p[1] not in env:
                 return 'Undeclared variable found!'
@@ -151,9 +167,26 @@ def run(p):
     else:
         return p
 
-while True:
-    try: 
-        s = input('📥 >> : ')
-    except EOFError:
-        break
-    parser.parse(s)
+i = input(prompt)
+
+while not (int(i) == 1 or int(i) == 2):
+    print("\nInvalid input!\n")
+    i = input(prompt)
+
+i = int(i)
+if i == 1:
+    while True:
+        try: 
+            s = input('📥 >> : ')
+        except EOFError:
+            break
+        parser.parse(s)
+else:
+    filename = input("Input the file name (Ex: test.ec):\n")
+    if DEBUG:
+        print("\nDEBUG IS ON.\n")
+    with open(filename,"r") as f:
+        data = f.readlines() # readlines() returns a list of items, each item is a line in your file
+        for ln in data:
+            parser.parse(ln)
+
