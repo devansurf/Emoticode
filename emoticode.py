@@ -13,16 +13,21 @@ tokens = [
     'MINUS',
     'DIVIDE',
     'MULTIPLY',
-    'EQUALS'
+    'EQUALS',
+    'LPAREN',
+    'RPAREN'
 ]
 #PLY looks for the the syntax 't_' to register what a token will look like
 
 # 'r' is for raw strings
+
 t_PLUS = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'\/'
 t_EQUALS = r'\='
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 
 t_ignore = r' '
 
@@ -102,6 +107,13 @@ def p_expression_int_float(p):
     #Expression will be evaluated to whatever the value is
     p[0] = p[1]
 
+def p_expression_parenthesis(p):
+    '''
+    expression : LPAREN expression RPAREN
+    '''
+    #remove parentheses, evaluate anything inside parenthesis as seperate expression
+    p[0] = p[2]
+
 def p_error(p):
     print("Syntax Error Found!")
 
@@ -138,10 +150,10 @@ def run(p):
                 return env[p[1]]
     else:
         return p
-        
+
 while True:
     try: 
-        s = input('>> ')
+        s = input('📥 >> : ')
     except EOFError:
         break
     parser.parse(s)

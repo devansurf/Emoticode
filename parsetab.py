@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEDIVIDE EQUALS FLOAT INT MINUS MULTIPLY NAME PLUS\n    calc : expression\n         | var_assign\n         | empty\n    \n    var_assign : NAME EQUALS expression\n    \n    expression : expression PLUS expression\n               | expression DIVIDE expression\n               | expression MULTIPLY expression\n               | expression MINUS expression\n    \n    expression : NAME\n    \n    expression : INT\n               | FLOAT\n    \n    empty :\n    '
+_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEDIVIDE EQUALS FLOAT INT LPAREN MINUS MULTIPLY NAME PLUS RPAREN\n    calc : expression\n         | var_assign\n         | empty\n    \n    var_assign : NAME EQUALS expression\n    \n    expression : expression PLUS expression\n               | expression DIVIDE expression\n               | expression MULTIPLY expression\n               | expression MINUS expression\n    \n    expression : NAME\n    \n    expression : INT\n               | FLOAT\n    \n    expression : LPAREN expression RPAREN\n    \n    empty :\n    '
     
-_lr_action_items = {'NAME':([0,8,9,10,11,12,],[5,14,14,14,14,14,]),'INT':([0,8,9,10,11,12,],[6,6,6,6,6,6,]),'FLOAT':([0,8,9,10,11,12,],[7,7,7,7,7,7,]),'$end':([0,1,2,3,4,5,6,7,13,14,15,16,17,18,],[-12,0,-1,-2,-3,-9,-10,-11,-5,-9,-6,-7,-8,-4,]),'PLUS':([2,5,6,7,13,14,15,16,17,18,],[8,-9,-10,-11,-5,-9,-6,-7,-8,8,]),'DIVIDE':([2,5,6,7,13,14,15,16,17,18,],[9,-9,-10,-11,9,-9,-6,-7,9,9,]),'MULTIPLY':([2,5,6,7,13,14,15,16,17,18,],[10,-9,-10,-11,10,-9,-6,-7,10,10,]),'MINUS':([2,5,6,7,13,14,15,16,17,18,],[11,-9,-10,-11,-5,-9,-6,-7,-8,11,]),'EQUALS':([5,],[12,]),}
+_lr_action_items = {'NAME':([0,8,9,10,11,12,13,],[5,15,15,15,15,15,15,]),'INT':([0,8,9,10,11,12,13,],[6,6,6,6,6,6,6,]),'FLOAT':([0,8,9,10,11,12,13,],[7,7,7,7,7,7,7,]),'LPAREN':([0,8,9,10,11,12,13,],[8,8,8,8,8,8,8,]),'$end':([0,1,2,3,4,5,6,7,15,16,17,18,19,20,21,],[-13,0,-1,-2,-3,-9,-10,-11,-9,-5,-6,-7,-8,-4,-12,]),'PLUS':([2,5,6,7,14,15,16,17,18,19,20,21,],[9,-9,-10,-11,9,-9,-5,-6,-7,-8,9,-12,]),'DIVIDE':([2,5,6,7,14,15,16,17,18,19,20,21,],[10,-9,-10,-11,10,-9,10,-6,-7,10,10,-12,]),'MULTIPLY':([2,5,6,7,14,15,16,17,18,19,20,21,],[11,-9,-10,-11,11,-9,11,-6,-7,11,11,-12,]),'MINUS':([2,5,6,7,14,15,16,17,18,19,20,21,],[12,-9,-10,-11,12,-9,-5,-6,-7,-8,12,-12,]),'EQUALS':([5,],[13,]),'RPAREN':([6,7,14,15,16,17,18,19,21,],[-10,-11,21,-9,-5,-6,-7,-8,-12,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,8,9,10,11,12,],[2,13,15,16,17,18,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
+_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,8,9,10,11,12,13,],[2,14,16,17,18,19,20,]),'var_assign':([0,],[3,]),'empty':([0,],[4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,16 +27,17 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> calc","S'",1,None,None,None),
-  ('calc -> expression','calc',1,'p_emoticode','emoticode.py',67),
-  ('calc -> var_assign','calc',1,'p_emoticode','emoticode.py',68),
-  ('calc -> empty','calc',1,'p_emoticode','emoticode.py',69),
-  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','emoticode.py',75),
-  ('expression -> expression PLUS expression','expression',3,'p_expression','emoticode.py',81),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression','emoticode.py',82),
-  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','emoticode.py',83),
-  ('expression -> expression MINUS expression','expression',3,'p_expression','emoticode.py',84),
-  ('expression -> NAME','expression',1,'p_expression_var','emoticode.py',92),
-  ('expression -> INT','expression',1,'p_expression_int_float','emoticode.py',99),
-  ('expression -> FLOAT','expression',1,'p_expression_int_float','emoticode.py',100),
-  ('empty -> <empty>','empty',0,'p_empty','emoticode.py',110),
+  ('calc -> expression','calc',1,'p_emoticode','emoticode.py',73),
+  ('calc -> var_assign','calc',1,'p_emoticode','emoticode.py',74),
+  ('calc -> empty','calc',1,'p_emoticode','emoticode.py',75),
+  ('var_assign -> NAME EQUALS expression','var_assign',3,'p_var_assign','emoticode.py',81),
+  ('expression -> expression PLUS expression','expression',3,'p_expression','emoticode.py',87),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression','emoticode.py',88),
+  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','emoticode.py',89),
+  ('expression -> expression MINUS expression','expression',3,'p_expression','emoticode.py',90),
+  ('expression -> NAME','expression',1,'p_expression_var','emoticode.py',98),
+  ('expression -> INT','expression',1,'p_expression_int_float','emoticode.py',105),
+  ('expression -> FLOAT','expression',1,'p_expression_int_float','emoticode.py',106),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_parenthesis','emoticode.py',113),
+  ('empty -> <empty>','empty',0,'p_empty','emoticode.py',123),
 ]
