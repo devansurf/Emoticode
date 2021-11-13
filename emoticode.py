@@ -3,6 +3,11 @@ import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+#Constants
+WAIT_UNTIL_END = "WAIT_UNTIL_END"
+#Memory
+env = {}
+state = None
 #-- Lexical Analysis --
 
 DEBUG = T
@@ -89,9 +94,10 @@ def t_COMMENT(t):
      pass
      # No return value. Token discarded
 
+# Define a rule so we can track line numbers
 def t_NEWLINE(t):
-     r'\n+'
-     t.lexer.lineno += len(t.value)
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 def t_error(t):
     print("Illegal characters!")
@@ -110,6 +116,7 @@ precedence = (
 def p_emoticode(p):
     '''
     emoti : code
+          | END
     '''
     run(p[1])
 
@@ -122,13 +129,14 @@ def p_code(p):
          | print
          | empty
     '''
-    p[0] = p[1]
+    global state
+    #Do not run until parser finds END
+    if state == WAIT_UNTIL_END:
+        p[0] = None
+    else:
+        p[0] = p[1]
 
-def p_print(p):
-    '''
-    print : PRINT LPAREN expression RPAREN
-    '''
-    p[0] = ('print', p[3])
+
 
 def p_var_assign(p):
     '''
@@ -151,14 +159,24 @@ def p_expression(p):
     #expression tree
     p[0] = (p[2], p[1], p[3])
 
+
 def p_conditional(p):
     '''
-    conditional : IF expression THEN code END
+    conditional : IF expression THEN
     '''
-    if run(p[2]):
-        run(p[4])
+    global state
+    if not run(p[2]):
+        state = WAIT_UNTIL_END
     else:
         p[0] = None
+
+def p_end(p):  
+    '''
+    end : END
+    '''
+    global state
+    state = None
+    p[0] = None
 
 def p_expression_var(p):
     '''
@@ -182,9 +200,14 @@ def p_expression_parenthesis(p):
     #remove parentheses, evaluate anything inside parenthesis as seperate expression
     p[0] = p[2]
 
-
+def p_print(p):
+    '''
+    print : PRINT LPAREN expression RPAREN
+    '''
+    p[0] = ('print', p[3])
 
 def p_error(p):
+    print(p)
     print("Syntax Error Found!")
 
 def p_empty(p):
@@ -196,10 +219,12 @@ def p_empty(p):
 
 #Start of input
 parser = yacc.yacc()
-env = {}
+
+
 
 def run(p):
     global env
+    global state
     #runs parse
     if type(p) == tuple:
         if p[0] == '+':
