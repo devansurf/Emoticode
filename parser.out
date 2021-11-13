@@ -1,1 +1,1055 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ELSE
+    WHILE
+
+Grammar
+
+Rule 0     S' -> emoti
+Rule 1     emoti -> code
+Rule 2     code -> expression
+Rule 3     code -> var_assign
+Rule 4     code -> conditional
+Rule 5     code -> print
+Rule 6     code -> empty
+Rule 7     print -> PRINT LPAREN expression RPAREN
+Rule 8     var_assign -> NAME ASSIGN expression
+Rule 9     expression -> expression PLUS expression
+Rule 10    expression -> expression DIVIDE expression
+Rule 11    expression -> expression MULTIPLY expression
+Rule 12    expression -> expression MINUS expression
+Rule 13    expression -> expression LESSTHAN expression
+Rule 14    expression -> expression GREATERTHAN expression
+Rule 15    expression -> expression EQUALS expression
+Rule 16    expression -> expression NOTEQUALS expression
+Rule 17    conditional -> IF expression THEN code END
+Rule 18    expression -> NAME
+Rule 19    expression -> INT
+Rule 20    expression -> FLOAT
+Rule 21    expression -> LPAREN expression RPAREN
+Rule 22    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ASSIGN               : 8
+DIVIDE               : 10
+ELSE                 : 
+END                  : 17
+EQUALS               : 15
+FLOAT                : 20
+GREATERTHAN          : 14
+IF                   : 17
+INT                  : 19
+LESSTHAN             : 13
+LPAREN               : 7 21
+MINUS                : 12
+MULTIPLY             : 11
+NAME                 : 8 18
+NOTEQUALS            : 16
+PLUS                 : 9
+PRINT                : 7
+RPAREN               : 7 21
+THEN                 : 17
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+code                 : 1 17
+conditional          : 4
+emoti                : 0
+empty                : 6
+expression           : 2 7 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 21
+print                : 5
+var_assign           : 3
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . emoti
+    (1) emoti -> . code
+    (2) code -> . expression
+    (3) code -> . var_assign
+    (4) code -> . conditional
+    (5) code -> . print
+    (6) code -> . empty
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+    (8) var_assign -> . NAME ASSIGN expression
+    (17) conditional -> . IF expression THEN code END
+    (7) print -> . PRINT LPAREN expression RPAREN
+    (22) empty -> .
+
+    NAME            shift and go to state 8
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+    IF              shift and go to state 12
+    PRINT           shift and go to state 13
+    $end            reduce using rule 22 (empty -> .)
+
+    emoti                          shift and go to state 1
+    code                           shift and go to state 2
+    expression                     shift and go to state 3
+    var_assign                     shift and go to state 4
+    conditional                    shift and go to state 5
+    print                          shift and go to state 6
+    empty                          shift and go to state 7
+
+state 1
+
+    (0) S' -> emoti .
+
+
+
+state 2
+
+    (1) emoti -> code .
+
+    $end            reduce using rule 1 (emoti -> code .)
+
+
+state 3
+
+    (2) code -> expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    $end            reduce using rule 2 (code -> expression .)
+    END             reduce using rule 2 (code -> expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+
+state 4
+
+    (3) code -> var_assign .
+
+    $end            reduce using rule 3 (code -> var_assign .)
+    END             reduce using rule 3 (code -> var_assign .)
+
+
+state 5
+
+    (4) code -> conditional .
+
+    $end            reduce using rule 4 (code -> conditional .)
+    END             reduce using rule 4 (code -> conditional .)
+
+
+state 6
+
+    (5) code -> print .
+
+    $end            reduce using rule 5 (code -> print .)
+    END             reduce using rule 5 (code -> print .)
+
+
+state 7
+
+    (6) code -> empty .
+
+    $end            reduce using rule 6 (code -> empty .)
+    END             reduce using rule 6 (code -> empty .)
+
+
+state 8
+
+    (18) expression -> NAME .
+    (8) var_assign -> NAME . ASSIGN expression
+
+    PLUS            reduce using rule 18 (expression -> NAME .)
+    DIVIDE          reduce using rule 18 (expression -> NAME .)
+    MULTIPLY        reduce using rule 18 (expression -> NAME .)
+    MINUS           reduce using rule 18 (expression -> NAME .)
+    LESSTHAN        reduce using rule 18 (expression -> NAME .)
+    GREATERTHAN     reduce using rule 18 (expression -> NAME .)
+    EQUALS          reduce using rule 18 (expression -> NAME .)
+    NOTEQUALS       reduce using rule 18 (expression -> NAME .)
+    $end            reduce using rule 18 (expression -> NAME .)
+    END             reduce using rule 18 (expression -> NAME .)
+    ASSIGN          shift and go to state 22
+
+
+state 9
+
+    (19) expression -> INT .
+
+    PLUS            reduce using rule 19 (expression -> INT .)
+    DIVIDE          reduce using rule 19 (expression -> INT .)
+    MULTIPLY        reduce using rule 19 (expression -> INT .)
+    MINUS           reduce using rule 19 (expression -> INT .)
+    LESSTHAN        reduce using rule 19 (expression -> INT .)
+    GREATERTHAN     reduce using rule 19 (expression -> INT .)
+    EQUALS          reduce using rule 19 (expression -> INT .)
+    NOTEQUALS       reduce using rule 19 (expression -> INT .)
+    $end            reduce using rule 19 (expression -> INT .)
+    RPAREN          reduce using rule 19 (expression -> INT .)
+    THEN            reduce using rule 19 (expression -> INT .)
+    END             reduce using rule 19 (expression -> INT .)
+
+
+state 10
+
+    (20) expression -> FLOAT .
+
+    PLUS            reduce using rule 20 (expression -> FLOAT .)
+    DIVIDE          reduce using rule 20 (expression -> FLOAT .)
+    MULTIPLY        reduce using rule 20 (expression -> FLOAT .)
+    MINUS           reduce using rule 20 (expression -> FLOAT .)
+    LESSTHAN        reduce using rule 20 (expression -> FLOAT .)
+    GREATERTHAN     reduce using rule 20 (expression -> FLOAT .)
+    EQUALS          reduce using rule 20 (expression -> FLOAT .)
+    NOTEQUALS       reduce using rule 20 (expression -> FLOAT .)
+    $end            reduce using rule 20 (expression -> FLOAT .)
+    RPAREN          reduce using rule 20 (expression -> FLOAT .)
+    THEN            reduce using rule 20 (expression -> FLOAT .)
+    END             reduce using rule 20 (expression -> FLOAT .)
+
+
+state 11
+
+    (21) expression -> LPAREN . expression RPAREN
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 23
+
+state 12
+
+    (17) conditional -> IF . expression THEN code END
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 25
+
+state 13
+
+    (7) print -> PRINT . LPAREN expression RPAREN
+
+    LPAREN          shift and go to state 26
+
+
+state 14
+
+    (9) expression -> expression PLUS . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 27
+
+state 15
+
+    (10) expression -> expression DIVIDE . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 28
+
+state 16
+
+    (11) expression -> expression MULTIPLY . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 29
+
+state 17
+
+    (12) expression -> expression MINUS . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 30
+
+state 18
+
+    (13) expression -> expression LESSTHAN . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 31
+
+state 19
+
+    (14) expression -> expression GREATERTHAN . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 32
+
+state 20
+
+    (15) expression -> expression EQUALS . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 33
+
+state 21
+
+    (16) expression -> expression NOTEQUALS . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 34
+
+state 22
+
+    (8) var_assign -> NAME ASSIGN . expression
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 35
+
+state 23
+
+    (21) expression -> LPAREN expression . RPAREN
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    RPAREN          shift and go to state 36
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+
+state 24
+
+    (18) expression -> NAME .
+
+    RPAREN          reduce using rule 18 (expression -> NAME .)
+    PLUS            reduce using rule 18 (expression -> NAME .)
+    DIVIDE          reduce using rule 18 (expression -> NAME .)
+    MULTIPLY        reduce using rule 18 (expression -> NAME .)
+    MINUS           reduce using rule 18 (expression -> NAME .)
+    LESSTHAN        reduce using rule 18 (expression -> NAME .)
+    GREATERTHAN     reduce using rule 18 (expression -> NAME .)
+    EQUALS          reduce using rule 18 (expression -> NAME .)
+    NOTEQUALS       reduce using rule 18 (expression -> NAME .)
+    THEN            reduce using rule 18 (expression -> NAME .)
+    $end            reduce using rule 18 (expression -> NAME .)
+    END             reduce using rule 18 (expression -> NAME .)
+
+
+state 25
+
+    (17) conditional -> IF expression . THEN code END
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    THEN            shift and go to state 37
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+
+state 26
+
+    (7) print -> PRINT LPAREN . expression RPAREN
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+
+    NAME            shift and go to state 24
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 38
+
+state 27
+
+    (9) expression -> expression PLUS expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    PLUS            reduce using rule 9 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 9 (expression -> expression PLUS expression .)
+    LESSTHAN        reduce using rule 9 (expression -> expression PLUS expression .)
+    GREATERTHAN     reduce using rule 9 (expression -> expression PLUS expression .)
+    EQUALS          reduce using rule 9 (expression -> expression PLUS expression .)
+    NOTEQUALS       reduce using rule 9 (expression -> expression PLUS expression .)
+    $end            reduce using rule 9 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 9 (expression -> expression PLUS expression .)
+    THEN            reduce using rule 9 (expression -> expression PLUS expression .)
+    END             reduce using rule 9 (expression -> expression PLUS expression .)
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+
+  ! DIVIDE          [ reduce using rule 9 (expression -> expression PLUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 9 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 14 ]
+  ! MINUS           [ shift and go to state 17 ]
+  ! LESSTHAN        [ shift and go to state 18 ]
+  ! GREATERTHAN     [ shift and go to state 19 ]
+  ! EQUALS          [ shift and go to state 20 ]
+  ! NOTEQUALS       [ shift and go to state 21 ]
+
+
+state 28
+
+    (10) expression -> expression DIVIDE expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    PLUS            reduce using rule 10 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 10 (expression -> expression DIVIDE expression .)
+    MULTIPLY        reduce using rule 10 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 10 (expression -> expression DIVIDE expression .)
+    LESSTHAN        reduce using rule 10 (expression -> expression DIVIDE expression .)
+    GREATERTHAN     reduce using rule 10 (expression -> expression DIVIDE expression .)
+    EQUALS          reduce using rule 10 (expression -> expression DIVIDE expression .)
+    NOTEQUALS       reduce using rule 10 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 10 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 10 (expression -> expression DIVIDE expression .)
+    THEN            reduce using rule 10 (expression -> expression DIVIDE expression .)
+    END             reduce using rule 10 (expression -> expression DIVIDE expression .)
+
+  ! PLUS            [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+  ! MULTIPLY        [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+  ! LESSTHAN        [ shift and go to state 18 ]
+  ! GREATERTHAN     [ shift and go to state 19 ]
+  ! EQUALS          [ shift and go to state 20 ]
+  ! NOTEQUALS       [ shift and go to state 21 ]
+
+
+state 29
+
+    (11) expression -> expression MULTIPLY expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    PLUS            reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    DIVIDE          reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    MULTIPLY        reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    MINUS           reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    LESSTHAN        reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    GREATERTHAN     reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    EQUALS          reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    NOTEQUALS       reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    $end            reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    RPAREN          reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    THEN            reduce using rule 11 (expression -> expression MULTIPLY expression .)
+    END             reduce using rule 11 (expression -> expression MULTIPLY expression .)
+
+  ! PLUS            [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 15 ]
+  ! MULTIPLY        [ shift and go to state 16 ]
+  ! MINUS           [ shift and go to state 17 ]
+  ! LESSTHAN        [ shift and go to state 18 ]
+  ! GREATERTHAN     [ shift and go to state 19 ]
+  ! EQUALS          [ shift and go to state 20 ]
+  ! NOTEQUALS       [ shift and go to state 21 ]
+
+
+state 30
+
+    (12) expression -> expression MINUS expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    PLUS            reduce using rule 12 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 12 (expression -> expression MINUS expression .)
+    LESSTHAN        reduce using rule 12 (expression -> expression MINUS expression .)
+    GREATERTHAN     reduce using rule 12 (expression -> expression MINUS expression .)
+    EQUALS          reduce using rule 12 (expression -> expression MINUS expression .)
+    NOTEQUALS       reduce using rule 12 (expression -> expression MINUS expression .)
+    $end            reduce using rule 12 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 12 (expression -> expression MINUS expression .)
+    THEN            reduce using rule 12 (expression -> expression MINUS expression .)
+    END             reduce using rule 12 (expression -> expression MINUS expression .)
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+
+  ! DIVIDE          [ reduce using rule 12 (expression -> expression MINUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 12 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 14 ]
+  ! MINUS           [ shift and go to state 17 ]
+  ! LESSTHAN        [ shift and go to state 18 ]
+  ! GREATERTHAN     [ shift and go to state 19 ]
+  ! EQUALS          [ shift and go to state 20 ]
+  ! NOTEQUALS       [ shift and go to state 21 ]
+
+
+state 31
+
+    (13) expression -> expression LESSTHAN expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for NOTEQUALS resolved as shift
+    $end            reduce using rule 13 (expression -> expression LESSTHAN expression .)
+    RPAREN          reduce using rule 13 (expression -> expression LESSTHAN expression .)
+    THEN            reduce using rule 13 (expression -> expression LESSTHAN expression .)
+    END             reduce using rule 13 (expression -> expression LESSTHAN expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+  ! PLUS            [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! DIVIDE          [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! MULTIPLY        [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! MINUS           [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! LESSTHAN        [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! GREATERTHAN     [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! EQUALS          [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+  ! NOTEQUALS       [ reduce using rule 13 (expression -> expression LESSTHAN expression .) ]
+
+
+state 32
+
+    (14) expression -> expression GREATERTHAN expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for NOTEQUALS resolved as shift
+    $end            reduce using rule 14 (expression -> expression GREATERTHAN expression .)
+    RPAREN          reduce using rule 14 (expression -> expression GREATERTHAN expression .)
+    THEN            reduce using rule 14 (expression -> expression GREATERTHAN expression .)
+    END             reduce using rule 14 (expression -> expression GREATERTHAN expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+  ! PLUS            [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! DIVIDE          [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! MULTIPLY        [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! MINUS           [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! LESSTHAN        [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! GREATERTHAN     [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! EQUALS          [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+  ! NOTEQUALS       [ reduce using rule 14 (expression -> expression GREATERTHAN expression .) ]
+
+
+state 33
+
+    (15) expression -> expression EQUALS expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for NOTEQUALS resolved as shift
+    $end            reduce using rule 15 (expression -> expression EQUALS expression .)
+    RPAREN          reduce using rule 15 (expression -> expression EQUALS expression .)
+    THEN            reduce using rule 15 (expression -> expression EQUALS expression .)
+    END             reduce using rule 15 (expression -> expression EQUALS expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+  ! PLUS            [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! DIVIDE          [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! MULTIPLY        [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! MINUS           [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! LESSTHAN        [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! GREATERTHAN     [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! EQUALS          [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+  ! NOTEQUALS       [ reduce using rule 15 (expression -> expression EQUALS expression .) ]
+
+
+state 34
+
+    (16) expression -> expression NOTEQUALS expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for MULTIPLY resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for LESSTHAN resolved as shift
+  ! shift/reduce conflict for GREATERTHAN resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for NOTEQUALS resolved as shift
+    $end            reduce using rule 16 (expression -> expression NOTEQUALS expression .)
+    RPAREN          reduce using rule 16 (expression -> expression NOTEQUALS expression .)
+    THEN            reduce using rule 16 (expression -> expression NOTEQUALS expression .)
+    END             reduce using rule 16 (expression -> expression NOTEQUALS expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+  ! PLUS            [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! DIVIDE          [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! MULTIPLY        [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! MINUS           [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! LESSTHAN        [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! GREATERTHAN     [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! EQUALS          [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+  ! NOTEQUALS       [ reduce using rule 16 (expression -> expression NOTEQUALS expression .) ]
+
+
+state 35
+
+    (8) var_assign -> NAME ASSIGN expression .
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    $end            reduce using rule 8 (var_assign -> NAME ASSIGN expression .)
+    END             reduce using rule 8 (var_assign -> NAME ASSIGN expression .)
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+
+state 36
+
+    (21) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    MULTIPLY        reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    LESSTHAN        reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    GREATERTHAN     reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    EQUALS          reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    NOTEQUALS       reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    THEN            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    END             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+
+
+state 37
+
+    (17) conditional -> IF expression THEN . code END
+    (2) code -> . expression
+    (3) code -> . var_assign
+    (4) code -> . conditional
+    (5) code -> . print
+    (6) code -> . empty
+    (9) expression -> . expression PLUS expression
+    (10) expression -> . expression DIVIDE expression
+    (11) expression -> . expression MULTIPLY expression
+    (12) expression -> . expression MINUS expression
+    (13) expression -> . expression LESSTHAN expression
+    (14) expression -> . expression GREATERTHAN expression
+    (15) expression -> . expression EQUALS expression
+    (16) expression -> . expression NOTEQUALS expression
+    (18) expression -> . NAME
+    (19) expression -> . INT
+    (20) expression -> . FLOAT
+    (21) expression -> . LPAREN expression RPAREN
+    (8) var_assign -> . NAME ASSIGN expression
+    (17) conditional -> . IF expression THEN code END
+    (7) print -> . PRINT LPAREN expression RPAREN
+    (22) empty -> .
+
+    NAME            shift and go to state 8
+    INT             shift and go to state 9
+    FLOAT           shift and go to state 10
+    LPAREN          shift and go to state 11
+    IF              shift and go to state 12
+    PRINT           shift and go to state 13
+    END             reduce using rule 22 (empty -> .)
+
+    expression                     shift and go to state 3
+    code                           shift and go to state 39
+    var_assign                     shift and go to state 4
+    conditional                    shift and go to state 5
+    print                          shift and go to state 6
+    empty                          shift and go to state 7
+
+state 38
+
+    (7) print -> PRINT LPAREN expression . RPAREN
+    (9) expression -> expression . PLUS expression
+    (10) expression -> expression . DIVIDE expression
+    (11) expression -> expression . MULTIPLY expression
+    (12) expression -> expression . MINUS expression
+    (13) expression -> expression . LESSTHAN expression
+    (14) expression -> expression . GREATERTHAN expression
+    (15) expression -> expression . EQUALS expression
+    (16) expression -> expression . NOTEQUALS expression
+
+    RPAREN          shift and go to state 40
+    PLUS            shift and go to state 14
+    DIVIDE          shift and go to state 15
+    MULTIPLY        shift and go to state 16
+    MINUS           shift and go to state 17
+    LESSTHAN        shift and go to state 18
+    GREATERTHAN     shift and go to state 19
+    EQUALS          shift and go to state 20
+    NOTEQUALS       shift and go to state 21
+
+
+state 39
+
+    (17) conditional -> IF expression THEN code . END
+
+    END             shift and go to state 41
+
+
+state 40
+
+    (7) print -> PRINT LPAREN expression RPAREN .
+
+    $end            reduce using rule 7 (print -> PRINT LPAREN expression RPAREN .)
+    END             reduce using rule 7 (print -> PRINT LPAREN expression RPAREN .)
+
+
+state 41
+
+    (17) conditional -> IF expression THEN code END .
+
+    $end            reduce using rule 17 (conditional -> IF expression THEN code END .)
+    END             reduce using rule 17 (conditional -> IF expression THEN code END .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 31 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 31 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 31 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 31 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 31 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 31 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 31 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALS in state 31 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 32 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 32 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 32 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 32 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 32 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 32 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 32 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALS in state 32 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 33 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 33 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 33 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 33 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 33 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 33 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 33 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALS in state 33 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 34 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLY in state 34 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 34 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 34 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 34 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 34 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALS in state 34 resolved as shift
