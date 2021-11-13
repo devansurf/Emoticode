@@ -4,12 +4,10 @@ import sys
 
 #-- Lexical Analysis --
 
-DEBUG = True
+DEBUG = False
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 #Convert inputs into tokens, run logic and compare valid syntax
 reserved = {
-    'if' : 'IF',
-    'then' : 'THEN',
     'else' : 'ELSE',
     'while' : 'WHILE',
 }
@@ -37,7 +35,11 @@ t_DIVIDE = r'\/'
 t_EQUALS = r'\='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+
 t_PRINT = r'\🖨️'
+t_IF = r'\🤔'
+t_THEN = r'\👶'
+t_END = r'\💀'
 
 t_ignore = r' '
 
