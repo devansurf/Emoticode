@@ -1,15 +1,14 @@
+from re import T
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
 #-- Lexical Analysis --
 
-DEBUG = True
+DEBUG = T
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 #Convert inputs into tokens, run logic and compare valid syntax
 reserved = {
-    'if' : 'IF',
-    'then' : 'THEN',
     'else' : 'ELSE',
     'while' : 'WHILE',
 }
@@ -21,9 +20,16 @@ tokens = [
     'MINUS',
     'DIVIDE',
     'MULTIPLY',
+    'ASSIGN',
+    'LESSTHAN',
+    'GREATERTHAN',
     'EQUALS',
+    'NOTEQUALS',
     'LPAREN',
     'RPAREN',
+    'IF',
+    'THEN',
+    'END',
     'PRINT',
 ]+ list(reserved.values())
 #PLY looks for the the syntax 't_' to register what a token will look like
@@ -34,10 +40,16 @@ t_PLUS = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'\/'
-t_EQUALS = r'\='
+t_ASSIGN = r'\='
+t_LESSTHAN = r'\<'
+t_GREATERTHAN = r'\>'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+
 t_PRINT = r'\🖨️'
+t_IF = r'\🤔'
+t_THEN = r'\👶'
+t_END = r'\💀'
 
 t_ignore = r' '
 
@@ -62,6 +74,16 @@ def t_NAME(t):
     t.type = reserved.get(t.value,'NAME')    # Check for reserved words
     return t
 
+def t_EQUALS(t):
+    #Only passes ==
+    r'(?<!=)==(?!=)'
+    return t
+
+def t_NOTEQUALS(t):
+    #This regex passes both == and !=
+    r'(?<![!=])[!=]=(?!=)'
+    return t
+    
 def t_COMMENT(t):
      r'\💬.*'
      pass
@@ -87,12 +109,20 @@ precedence = (
 #Start of parser Tree
 def p_emoticode(p):
     '''
-    emoti : expression
+    emoti : code
+    '''
+    run(p[1])
+
+def p_code(p):
+    #Exists to execute other blocks without running emoticode
+    '''
+     code : expression
          | var_assign
+         | conditional
          | print
          | empty
     '''
-    run(p[1])
+    p[0] = p[1]
 
 def p_print(p):
     '''
@@ -102,7 +132,7 @@ def p_print(p):
 
 def p_var_assign(p):
     '''
-    var_assign : NAME EQUALS expression
+    var_assign : NAME ASSIGN expression
     '''
     p[0] = ('=', p[1], p[3])
 
@@ -113,9 +143,22 @@ def p_expression(p):
                | expression DIVIDE expression
                | expression MULTIPLY expression
                | expression MINUS expression
+               | expression LESSTHAN expression
+               | expression GREATERTHAN expression
+               | expression EQUALS expression
+               | expression NOTEQUALS expression
     '''
     #expression tree
     p[0] = (p[2], p[1], p[3])
+
+def p_conditional(p):
+    '''
+    conditional : IF expression THEN code END
+    '''
+    if run(p[2]):
+        run(p[4])
+    else:
+        p[0] = None
 
 def p_expression_var(p):
     '''
@@ -138,6 +181,8 @@ def p_expression_parenthesis(p):
     '''
     #remove parentheses, evaluate anything inside parenthesis as seperate expression
     p[0] = p[2]
+
+
 
 def p_error(p):
     print("Syntax Error Found!")
@@ -165,6 +210,15 @@ def run(p):
             return run(p[1]) * run (p[2])
         elif p[0] == '/':
             return run(p[1]) / run (p[2])
+        elif p[0] == '<':
+            return run(p[1]) < run (p[2])
+        elif p[0] == '>':
+            return run(p[1]) > run (p[2])
+        elif p[0] == '==':
+            return run(p[1]) == run (p[2])
+        elif p[0] == '!=':
+            return run(p[1]) != run (p[2])
+
         elif p[0] == 'print':
             return print(run(p[1]))
 
