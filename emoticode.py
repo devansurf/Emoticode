@@ -118,7 +118,7 @@ def p_emoticode(p):
     emoti : code
           | END
     '''
-    run(p[1])
+    p[0] = p[1]
 
 def p_code(p):
     #Exists to execute other blocks without running emoticode
@@ -159,6 +159,7 @@ def p_expression(p):
     #expression tree
     p[0] = (p[2], p[1], p[3])
 
+<<<<<<< HEAD
 
 def p_conditional(p):
     '''
@@ -178,6 +179,17 @@ def p_end(p):
     state = None
     p[0] = None
 
+=======
+def p_conditional(p):
+    '''
+    conditional : IF expression THEN code END
+    '''
+    if run(p[2]):
+        run(p[4])
+    else:
+        p[0] = None
+
+>>>>>>> 90d632b607b683ce6db3ecfee13503bd895d09e3
 def p_expression_var(p):
     '''
     expression : NAME
@@ -200,11 +212,15 @@ def p_expression_parenthesis(p):
     #remove parentheses, evaluate anything inside parenthesis as seperate expression
     p[0] = p[2]
 
+<<<<<<< HEAD
 def p_print(p):
     '''
     print : PRINT LPAREN expression RPAREN
     '''
     p[0] = ('print', p[3])
+=======
+
+>>>>>>> 90d632b607b683ce6db3ecfee13503bd895d09e3
 
 def p_error(p):
     print(p)
