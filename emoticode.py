@@ -9,8 +9,10 @@ WAIT_UNTIL_END = "WAIT_UNTIL_END"
 
 lnNum = 0
 env = {}
+
+#stacks
 goto = [] 
-state = None
+state = []
 #-- Lexical Analysis --
 
 DEBUG = False
@@ -129,9 +131,10 @@ precedence = (
 def p_emoticode(p):
     '''
     emoti : code
+          | conditional
+          | while
           | end
     '''
-    run(p[1])
     p[0] = p[1]
 
 def p_code(p):
@@ -139,14 +142,12 @@ def p_code(p):
     '''
      code : expression
           | var_assign
-          | conditional
-          | while
           | print
           | empty
     '''
     global state
     #Do not run until parser finds END
-    if state == WAIT_UNTIL_END:
+    if peek_stack(state) == WAIT_UNTIL_END:
         p[0] = None
     else:
         p[0] = p[1]
@@ -185,8 +186,9 @@ def p_conditional(p):
     '''
 
     global state
-    if not run(p[2]):
-        state = WAIT_UNTIL_END
+    #If WAIT_UNTIL_END before conditional, then add to the stack and ignore this step
+    if not run(p[2]) or peek_stack(state) == WAIT_UNTIL_END:
+        state.append(WAIT_UNTIL_END) 
     else:
         p[0] = None
 
@@ -199,11 +201,11 @@ def p_while(p):
     global goto
     #If false, skip the loop
     if not run(p[2]):
-        state = WAIT_UNTIL_END
+        state.append(WAIT_UNTIL_END)
     #If true, run the block and run the check again
     else: 
         #Add while line# to goto stack for later reference
-        goto.insert(0, lnNum)
+        goto.append(lnNum)
         p[0] = None
 
 def p_end(p):  
@@ -212,7 +214,8 @@ def p_end(p):
     '''
 
     global state
-    state = None
+    if peek_stack(state) != -1:
+        state.pop()
     p[0] = p[1]
 
 def p_expression_var(p):
@@ -257,7 +260,6 @@ parser = yacc.yacc()
 
 def run(p):
     global env
-    global state
     #runs parse
     if type(p) == tuple:
         if p[0] == '+':
@@ -278,7 +280,7 @@ def run(p):
             return run(p[1]) != run (p[2])
 
         elif p[0] == 'print':
-            return print(run(p[1]))
+            return print("\nOutput: " + str(run(p[1])))
 
         elif p[0] == '=':
             env[p[1]] = run(p[2])
@@ -316,11 +318,13 @@ else:
         while lnNum < len(data):
             
             result = parser.parse(data[lnNum])
-            
+            run(result)
+
             gotoLn = peek_stack(goto)
             if result and gotoLn > 0:
                 if result[0] == "💀" and lnNum >= gotoLn:
                     #subtract lnNum to start from the beginning of the loop
+                    print("RAN")
                     lnNum -= (lnNum - goto.pop()) + 2
             lnNum += 1
             
