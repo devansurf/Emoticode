@@ -47,6 +47,7 @@ tokens = [
     'WHILE',
     'THEN',
     'END',
+    'STRING',
     'PRINT',
 ]+ list(reserved.values())
 #PLY looks for the the syntax 't_' to register what a token will look like
@@ -73,6 +74,14 @@ t_ignore = r' '
 
 
 #Function order matters! Lexer compares the functions from top to bottom.
+
+# def t_char(t):
+#    r'\'([^\\\n]|(\\.))*?\''
+
+def t_STRING(t):
+    r'\"([^\\\n]|(\\.))*?\"'
+    t.value = str(t.value).replace('"', '')
+    return t
 
 def t_FLOAT(t):
     #Regular expression with a length greater than one in front and behind a point
@@ -225,10 +234,11 @@ def p_expression_var(p):
     #Expression will be evaluated to whatever the value is
     p[0] = ('var', p[1])
 
-def p_expression_int_float(p):
+def p_expression_int_float_string(p):
     '''
     expression : INT
                | FLOAT
+               | STRING
     '''
     #Expression will be evaluated to whatever the value is
     p[0] = p[1]
@@ -294,38 +304,24 @@ def run(p):
     else:
         return p
 
-i = input(prompt)
 
-while not (int(i) == 1 or int(i) == 2):
-    print("\nInvalid input!\n")
-    i = input(prompt)
-
-i = int(i)
-if i == 1:
-    while True:
-        try: 
-            s = input('📥 >> : ')
-        except EOFError:
-            break
-        parser.parse(s)
-else:
-    filename = input("Input the file name (Ex: test.ec , loop.ec):\n")
-    if DEBUG:
-        print("\nDEBUG IS ON.\n")
-    with open(filename,"r") as f:
-        data = f.readlines() # readlines() returns a list of items, each item is a line in your file
+filename = input("Input the file name (Ex: test.ec , loop.ec):\n")
+if DEBUG:
+    print("\nDEBUG IS ON.\n")
+with open(filename,"r") as f:
+    data = f.readlines() # readlines() returns a list of items, each item is a line in your file
   
-        while lnNum < len(data):
+    while lnNum < len(data):
             
-            result = parser.parse(data[lnNum])
-            run(result)
+        result = parser.parse(data[lnNum])
+        run(result)
 
-            gotoLn = peek_stack(goto)
-            if result and gotoLn > 0:
-                if result[0] == "💀" and lnNum >= gotoLn:
-                    #subtract lnNum to start from the beginning of the loop
-                    lnNum -= (lnNum - goto.pop()) + 2
-            lnNum += 1
+        gotoLn = peek_stack(goto)
+        if result and gotoLn > 0:
+            if result[0] == "💀" and lnNum >= gotoLn:
+                #subtract lnNum to start from the beginning of the loop
+                lnNum -= (lnNum - goto.pop()) + 2
+        lnNum += 1
             
     #Potential logic to detect blocks (incomplete)
    # for lnNum in range(goto.pop(), p.lineno(1)):
