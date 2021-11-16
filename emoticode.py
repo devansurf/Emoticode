@@ -13,7 +13,7 @@ goto = []
 state = None
 #-- Lexical Analysis --
 
-DEBUG = T
+DEBUG = False
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 
 def peek_stack(stack):
@@ -323,7 +323,7 @@ else:
                     #subtract lnNum to start from the beginning of the loop
                     lnNum -= (lnNum - goto.pop()) + 2
             lnNum += 1
-
+            
     #Potential logic to detect blocks (incomplete)
    # for lnNum in range(goto.pop(), p.lineno(1)):
         #     lexer.input(data[lnNum])
