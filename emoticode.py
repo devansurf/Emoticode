@@ -200,7 +200,7 @@ def p_while(p):
     global state
     global goto
     #If false, skip the loop
-    if not run(p[2]):
+    if not run(p[2]) or peek_stack(state) == WAIT_UNTIL_END:
         state.append(WAIT_UNTIL_END)
     #If true, run the block and run the check again
     else: 
@@ -280,7 +280,7 @@ def run(p):
             return run(p[1]) != run (p[2])
 
         elif p[0] == 'print':
-            return print("\nOutput: " + str(run(p[1])))
+            return print("Output: " + str(run(p[1])))
 
         elif p[0] == '=':
             env[p[1]] = run(p[2])
@@ -309,7 +309,7 @@ if i == 1:
             break
         parser.parse(s)
 else:
-    filename = input("Input the file name (Ex: test.ec):\n")
+    filename = input("Input the file name (Ex: test.ec , loop.ec):\n")
     if DEBUG:
         print("\nDEBUG IS ON.\n")
     with open(filename,"r") as f:
@@ -324,7 +324,6 @@ else:
             if result and gotoLn > 0:
                 if result[0] == "💀" and lnNum >= gotoLn:
                     #subtract lnNum to start from the beginning of the loop
-                    print("RAN")
                     lnNum -= (lnNum - goto.pop()) + 2
             lnNum += 1
             
