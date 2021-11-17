@@ -11,14 +11,16 @@ iterations = 0
         x = x -1  
         j = 10 
 
-        🔁 j > 0 👶
+        🔁 j > 5 👶
             j = j -1 
             y = 10
 
             🔁 y > 0 👶
                 iterations = iterations + 1
                 y = y -1      
-            💀       
+            💀   
+             🖨️("Why hello")   
+             🖨️("This is a multi-line print for testing purposes")
         💀   
     💀
 💀

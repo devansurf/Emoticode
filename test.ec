@@ -7,7 +7,7 @@ myString = "Hello world"
 🖨️(myString)
 
 🤔(x == y)👶 
-    💬 Only runs inside block when x is not equal to y
+    💬 Only runs inside block when x is equal to y
     x = y
     
     🤔 (z == x)👶 

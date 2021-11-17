@@ -209,7 +209,7 @@ def p_function(p):
     else:
         #register the function in the dictionary
         funcGoto[str(p[2])] = lnNum
-        #state.append(WAIT_UNTIL_END)
+        state.append(WAIT_UNTIL_END)
 
 def p_conditional(p):
     '''
@@ -351,20 +351,18 @@ with open(filename,"r") as f:
         run(result)
         lnNum += 1
 
+        #Start of GOTO logic -> handles jumps between lines
         gotoLn = peek_stack(goto)
-        
-
         if result and gotoLn > 0:
-            
-            #Resolve any WAIT states before goto's
-            if peek_stack(state) != -1:
-                state.pop()
-
             #Goto's trigger on END
-            elif result[0] == "💀":
-                #modify lnNum, start from the goto line
-                lnNum = gotoLn
-                goto.pop()
+            if result[0] == "💀":
+
+                #Resolve any WAIT states before goto's
+                if peek_stack(state) != -1:
+                    state.pop()
+                else: #modify lnNum, start from the goto line
+                    lnNum = gotoLn
+                    goto.pop()
         
             
     #Potential logic to detect blocks (incomplete)
