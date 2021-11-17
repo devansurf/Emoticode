@@ -13,9 +13,15 @@ env = {}
 #stacks
 goto = [] 
 state = []
+func_calls = []
+
+#Key Value pairs
+lnGoto = {}             #Key -> trigger line Num, Value -> goto Line number
+funcGoto = {}           #Key -> Func Name, Value -> starting line number
+
 #-- Lexical Analysis --
 
-DEBUG = False
+DEBUG = T
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 
 def peek_stack(stack):
@@ -47,6 +53,8 @@ tokens = [
     'WHILE',
     'THEN',
     'END',
+    'FUNC',
+    'COMMA',
     'STRING',
     'PRINT',
 ]+ list(reserved.values())
@@ -63,12 +71,14 @@ t_LESSTHAN = r'\<'
 t_GREATERTHAN = r'\>'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_COMMA = r'\,'
 
 t_PRINT = r'\🖨️'
 t_WHILE = r'\🔁'
 t_IF = r'\🤔'
 t_THEN = r'\👶'
 t_END = r'\💀'
+t_FUNC = r'\#️⃣'
 
 t_ignore = r' '
 
@@ -189,6 +199,18 @@ def p_expression(p):
     p[0] = (p[2], p[1], p[3])
 
 
+def p_function(p):
+    '''
+    function : FUNC NAME LPAREN param RPAREN THEN
+    '''
+    #Check if there is a request to run the function
+    if peek_stack(func_calls) == str(p[2]):
+        print("do something")
+    else:
+        #register the function in the dictionary
+        funcGoto[str(p[2])] = lnNum
+        #state.append(WAIT_UNTIL_END)
+
 def p_conditional(p):
     '''
     conditional : IF expression THEN
@@ -226,6 +248,18 @@ def p_end(p):
     if peek_stack(state) != -1:
         state.pop()
     p[0] = p[1]
+
+def p_param_multi(p):
+    '''
+    param : param COMMA param
+    '''
+    p[0] = ('param', p[1], p[3])
+    
+def p_param_single(p):
+    '''
+    param : expression
+    '''
+    p[0] = ('param', p[1])
 
 def p_expression_var(p):
     '''
@@ -315,13 +349,23 @@ with open(filename,"r") as f:
             
         result = parser.parse(data[lnNum])
         run(result)
+        lnNum += 1
 
         gotoLn = peek_stack(goto)
+        
+
         if result and gotoLn > 0:
-            if result[0] == "💀" and lnNum >= gotoLn:
-                #subtract lnNum to start from the beginning of the loop
-                lnNum -= (lnNum - goto.pop()) + 2
-        lnNum += 1
+            
+            #Resolve any WAIT states before goto's
+            if peek_stack(state) != -1:
+                state.pop()
+
+            #Goto's trigger on END
+            elif result[0] == "💀":
+                #modify lnNum, start from the goto line
+                lnNum = gotoLn
+                goto.pop()
+        
             
     #Potential logic to detect blocks (incomplete)
    # for lnNum in range(goto.pop(), p.lineno(1)):

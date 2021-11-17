@@ -24,40 +24,45 @@ Rule 14    expression -> expression LESSTHAN expression
 Rule 15    expression -> expression GREATERTHAN expression
 Rule 16    expression -> expression EQUALS expression
 Rule 17    expression -> expression NOTEQUALS expression
-Rule 18    conditional -> IF expression THEN
-Rule 19    while -> WHILE expression THEN
-Rule 20    end -> END
-Rule 21    expression -> NAME
-Rule 22    expression -> INT
-Rule 23    expression -> FLOAT
-Rule 24    expression -> STRING
-Rule 25    expression -> LPAREN expression RPAREN
-Rule 26    print -> PRINT LPAREN expression RPAREN
-Rule 27    empty -> <empty>
+Rule 18    function -> FUNC NAME LPAREN param RPAREN THEN
+Rule 19    conditional -> IF expression THEN
+Rule 20    while -> WHILE expression THEN
+Rule 21    end -> END
+Rule 22    param -> param COMMA param
+Rule 23    param -> expression
+Rule 24    expression -> NAME
+Rule 25    expression -> INT
+Rule 26    expression -> FLOAT
+Rule 27    expression -> STRING
+Rule 28    expression -> LPAREN expression RPAREN
+Rule 29    print -> PRINT LPAREN expression RPAREN
+Rule 30    empty -> <empty>
 
 Terminals, with rules where they appear
 
 ASSIGN               : 9
+COMMA                : 22
 DIVIDE               : 11
 ELSE                 : 
-END                  : 20
+END                  : 21
 EQUALS               : 16
-FLOAT                : 23
+FLOAT                : 26
+FUNC                 : 18
 GREATERTHAN          : 15
-IF                   : 18
-INT                  : 22
+IF                   : 19
+INT                  : 25
 LESSTHAN             : 14
-LPAREN               : 25 26
+LPAREN               : 18 28 29
 MINUS                : 13
 MULTIPLY             : 12
-NAME                 : 9 21
+NAME                 : 9 18 24
 NOTEQUALS            : 17
 PLUS                 : 10
-PRINT                : 26
-RPAREN               : 25 26
-STRING               : 24
-THEN                 : 18 19
-WHILE                : 19
+PRINT                : 29
+RPAREN               : 18 28 29
+STRING               : 27
+THEN                 : 18 19 20
+WHILE                : 20
 error                : 
 
 Nonterminals, with rules where they appear
@@ -67,7 +72,9 @@ conditional          : 2
 emoti                : 0
 empty                : 8
 end                  : 4
-expression           : 5 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 19 25 26
+expression           : 5 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 19 20 23 28 29
+function             : 
+param                : 18 22 22
 print                : 7
 var_assign           : 6
 while                : 3
@@ -85,9 +92,9 @@ state 0
     (6) code -> . var_assign
     (7) code -> . print
     (8) code -> . empty
-    (18) conditional -> . IF expression THEN
-    (19) while -> . WHILE expression THEN
-    (20) end -> . END
+    (19) conditional -> . IF expression THEN
+    (20) while -> . WHILE expression THEN
+    (21) end -> . END
     (10) expression -> . expression PLUS expression
     (11) expression -> . expression DIVIDE expression
     (12) expression -> . expression MULTIPLY expression
@@ -96,14 +103,14 @@ state 0
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
     (9) var_assign -> . NAME ASSIGN expression
-    (26) print -> . PRINT LPAREN expression RPAREN
-    (27) empty -> .
+    (29) print -> . PRINT LPAREN expression RPAREN
+    (30) empty -> .
 
     IF              shift and go to state 10
     WHILE           shift and go to state 11
@@ -114,7 +121,7 @@ state 0
     STRING          shift and go to state 16
     LPAREN          shift and go to state 17
     PRINT           shift and go to state 18
-    $end            reduce using rule 27 (empty -> .)
+    $end            reduce using rule 30 (empty -> .)
 
     emoti                          shift and go to state 1
     code                           shift and go to state 2
@@ -206,7 +213,7 @@ state 9
 
 state 10
 
-    (18) conditional -> IF . expression THEN
+    (19) conditional -> IF . expression THEN
     (10) expression -> . expression PLUS expression
     (11) expression -> . expression DIVIDE expression
     (12) expression -> . expression MULTIPLY expression
@@ -215,11 +222,11 @@ state 10
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -231,7 +238,7 @@ state 10
 
 state 11
 
-    (19) while -> WHILE . expression THEN
+    (20) while -> WHILE . expression THEN
     (10) expression -> . expression PLUS expression
     (11) expression -> . expression DIVIDE expression
     (12) expression -> . expression MULTIPLY expression
@@ -240,11 +247,11 @@ state 11
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -256,82 +263,82 @@ state 11
 
 state 12
 
-    (20) end -> END .
+    (21) end -> END .
 
-    $end            reduce using rule 20 (end -> END .)
+    $end            reduce using rule 21 (end -> END .)
 
 
 state 13
 
-    (21) expression -> NAME .
+    (24) expression -> NAME .
     (9) var_assign -> NAME . ASSIGN expression
 
-    PLUS            reduce using rule 21 (expression -> NAME .)
-    DIVIDE          reduce using rule 21 (expression -> NAME .)
-    MULTIPLY        reduce using rule 21 (expression -> NAME .)
-    MINUS           reduce using rule 21 (expression -> NAME .)
-    LESSTHAN        reduce using rule 21 (expression -> NAME .)
-    GREATERTHAN     reduce using rule 21 (expression -> NAME .)
-    EQUALS          reduce using rule 21 (expression -> NAME .)
-    NOTEQUALS       reduce using rule 21 (expression -> NAME .)
-    $end            reduce using rule 21 (expression -> NAME .)
+    PLUS            reduce using rule 24 (expression -> NAME .)
+    DIVIDE          reduce using rule 24 (expression -> NAME .)
+    MULTIPLY        reduce using rule 24 (expression -> NAME .)
+    MINUS           reduce using rule 24 (expression -> NAME .)
+    LESSTHAN        reduce using rule 24 (expression -> NAME .)
+    GREATERTHAN     reduce using rule 24 (expression -> NAME .)
+    EQUALS          reduce using rule 24 (expression -> NAME .)
+    NOTEQUALS       reduce using rule 24 (expression -> NAME .)
+    $end            reduce using rule 24 (expression -> NAME .)
     ASSIGN          shift and go to state 30
 
 
 state 14
 
-    (22) expression -> INT .
+    (25) expression -> INT .
 
-    PLUS            reduce using rule 22 (expression -> INT .)
-    DIVIDE          reduce using rule 22 (expression -> INT .)
-    MULTIPLY        reduce using rule 22 (expression -> INT .)
-    MINUS           reduce using rule 22 (expression -> INT .)
-    LESSTHAN        reduce using rule 22 (expression -> INT .)
-    GREATERTHAN     reduce using rule 22 (expression -> INT .)
-    EQUALS          reduce using rule 22 (expression -> INT .)
-    NOTEQUALS       reduce using rule 22 (expression -> INT .)
-    $end            reduce using rule 22 (expression -> INT .)
-    THEN            reduce using rule 22 (expression -> INT .)
-    RPAREN          reduce using rule 22 (expression -> INT .)
+    PLUS            reduce using rule 25 (expression -> INT .)
+    DIVIDE          reduce using rule 25 (expression -> INT .)
+    MULTIPLY        reduce using rule 25 (expression -> INT .)
+    MINUS           reduce using rule 25 (expression -> INT .)
+    LESSTHAN        reduce using rule 25 (expression -> INT .)
+    GREATERTHAN     reduce using rule 25 (expression -> INT .)
+    EQUALS          reduce using rule 25 (expression -> INT .)
+    NOTEQUALS       reduce using rule 25 (expression -> INT .)
+    $end            reduce using rule 25 (expression -> INT .)
+    THEN            reduce using rule 25 (expression -> INT .)
+    RPAREN          reduce using rule 25 (expression -> INT .)
 
 
 state 15
 
-    (23) expression -> FLOAT .
+    (26) expression -> FLOAT .
 
-    PLUS            reduce using rule 23 (expression -> FLOAT .)
-    DIVIDE          reduce using rule 23 (expression -> FLOAT .)
-    MULTIPLY        reduce using rule 23 (expression -> FLOAT .)
-    MINUS           reduce using rule 23 (expression -> FLOAT .)
-    LESSTHAN        reduce using rule 23 (expression -> FLOAT .)
-    GREATERTHAN     reduce using rule 23 (expression -> FLOAT .)
-    EQUALS          reduce using rule 23 (expression -> FLOAT .)
-    NOTEQUALS       reduce using rule 23 (expression -> FLOAT .)
-    $end            reduce using rule 23 (expression -> FLOAT .)
-    THEN            reduce using rule 23 (expression -> FLOAT .)
-    RPAREN          reduce using rule 23 (expression -> FLOAT .)
+    PLUS            reduce using rule 26 (expression -> FLOAT .)
+    DIVIDE          reduce using rule 26 (expression -> FLOAT .)
+    MULTIPLY        reduce using rule 26 (expression -> FLOAT .)
+    MINUS           reduce using rule 26 (expression -> FLOAT .)
+    LESSTHAN        reduce using rule 26 (expression -> FLOAT .)
+    GREATERTHAN     reduce using rule 26 (expression -> FLOAT .)
+    EQUALS          reduce using rule 26 (expression -> FLOAT .)
+    NOTEQUALS       reduce using rule 26 (expression -> FLOAT .)
+    $end            reduce using rule 26 (expression -> FLOAT .)
+    THEN            reduce using rule 26 (expression -> FLOAT .)
+    RPAREN          reduce using rule 26 (expression -> FLOAT .)
 
 
 state 16
 
-    (24) expression -> STRING .
+    (27) expression -> STRING .
 
-    PLUS            reduce using rule 24 (expression -> STRING .)
-    DIVIDE          reduce using rule 24 (expression -> STRING .)
-    MULTIPLY        reduce using rule 24 (expression -> STRING .)
-    MINUS           reduce using rule 24 (expression -> STRING .)
-    LESSTHAN        reduce using rule 24 (expression -> STRING .)
-    GREATERTHAN     reduce using rule 24 (expression -> STRING .)
-    EQUALS          reduce using rule 24 (expression -> STRING .)
-    NOTEQUALS       reduce using rule 24 (expression -> STRING .)
-    $end            reduce using rule 24 (expression -> STRING .)
-    THEN            reduce using rule 24 (expression -> STRING .)
-    RPAREN          reduce using rule 24 (expression -> STRING .)
+    PLUS            reduce using rule 27 (expression -> STRING .)
+    DIVIDE          reduce using rule 27 (expression -> STRING .)
+    MULTIPLY        reduce using rule 27 (expression -> STRING .)
+    MINUS           reduce using rule 27 (expression -> STRING .)
+    LESSTHAN        reduce using rule 27 (expression -> STRING .)
+    GREATERTHAN     reduce using rule 27 (expression -> STRING .)
+    EQUALS          reduce using rule 27 (expression -> STRING .)
+    NOTEQUALS       reduce using rule 27 (expression -> STRING .)
+    $end            reduce using rule 27 (expression -> STRING .)
+    THEN            reduce using rule 27 (expression -> STRING .)
+    RPAREN          reduce using rule 27 (expression -> STRING .)
 
 
 state 17
 
-    (25) expression -> LPAREN . expression RPAREN
+    (28) expression -> LPAREN . expression RPAREN
     (10) expression -> . expression PLUS expression
     (11) expression -> . expression DIVIDE expression
     (12) expression -> . expression MULTIPLY expression
@@ -340,11 +347,11 @@ state 17
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -356,7 +363,7 @@ state 17
 
 state 18
 
-    (26) print -> PRINT . LPAREN expression RPAREN
+    (29) print -> PRINT . LPAREN expression RPAREN
 
     LPAREN          shift and go to state 32
 
@@ -372,11 +379,11 @@ state 19
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -397,11 +404,11 @@ state 20
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -422,11 +429,11 @@ state 21
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -447,11 +454,11 @@ state 22
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -472,11 +479,11 @@ state 23
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -497,11 +504,11 @@ state 24
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -522,11 +529,11 @@ state 25
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -547,11 +554,11 @@ state 26
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -563,7 +570,7 @@ state 26
 
 state 27
 
-    (18) conditional -> IF expression . THEN
+    (19) conditional -> IF expression . THEN
     (10) expression -> expression . PLUS expression
     (11) expression -> expression . DIVIDE expression
     (12) expression -> expression . MULTIPLY expression
@@ -586,24 +593,24 @@ state 27
 
 state 28
 
-    (21) expression -> NAME .
+    (24) expression -> NAME .
 
-    THEN            reduce using rule 21 (expression -> NAME .)
-    PLUS            reduce using rule 21 (expression -> NAME .)
-    DIVIDE          reduce using rule 21 (expression -> NAME .)
-    MULTIPLY        reduce using rule 21 (expression -> NAME .)
-    MINUS           reduce using rule 21 (expression -> NAME .)
-    LESSTHAN        reduce using rule 21 (expression -> NAME .)
-    GREATERTHAN     reduce using rule 21 (expression -> NAME .)
-    EQUALS          reduce using rule 21 (expression -> NAME .)
-    NOTEQUALS       reduce using rule 21 (expression -> NAME .)
-    RPAREN          reduce using rule 21 (expression -> NAME .)
-    $end            reduce using rule 21 (expression -> NAME .)
+    THEN            reduce using rule 24 (expression -> NAME .)
+    PLUS            reduce using rule 24 (expression -> NAME .)
+    DIVIDE          reduce using rule 24 (expression -> NAME .)
+    MULTIPLY        reduce using rule 24 (expression -> NAME .)
+    MINUS           reduce using rule 24 (expression -> NAME .)
+    LESSTHAN        reduce using rule 24 (expression -> NAME .)
+    GREATERTHAN     reduce using rule 24 (expression -> NAME .)
+    EQUALS          reduce using rule 24 (expression -> NAME .)
+    NOTEQUALS       reduce using rule 24 (expression -> NAME .)
+    RPAREN          reduce using rule 24 (expression -> NAME .)
+    $end            reduce using rule 24 (expression -> NAME .)
 
 
 state 29
 
-    (19) while -> WHILE expression . THEN
+    (20) while -> WHILE expression . THEN
     (10) expression -> expression . PLUS expression
     (11) expression -> expression . DIVIDE expression
     (12) expression -> expression . MULTIPLY expression
@@ -635,11 +642,11 @@ state 30
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -651,7 +658,7 @@ state 30
 
 state 31
 
-    (25) expression -> LPAREN expression . RPAREN
+    (28) expression -> LPAREN expression . RPAREN
     (10) expression -> expression . PLUS expression
     (11) expression -> expression . DIVIDE expression
     (12) expression -> expression . MULTIPLY expression
@@ -674,7 +681,7 @@ state 31
 
 state 32
 
-    (26) print -> PRINT LPAREN . expression RPAREN
+    (29) print -> PRINT LPAREN . expression RPAREN
     (10) expression -> . expression PLUS expression
     (11) expression -> . expression DIVIDE expression
     (12) expression -> . expression MULTIPLY expression
@@ -683,11 +690,11 @@ state 32
     (15) expression -> . expression GREATERTHAN expression
     (16) expression -> . expression EQUALS expression
     (17) expression -> . expression NOTEQUALS expression
-    (21) expression -> . NAME
-    (22) expression -> . INT
-    (23) expression -> . FLOAT
-    (24) expression -> . STRING
-    (25) expression -> . LPAREN expression RPAREN
+    (24) expression -> . NAME
+    (25) expression -> . INT
+    (26) expression -> . FLOAT
+    (27) expression -> . STRING
+    (28) expression -> . LPAREN expression RPAREN
 
     NAME            shift and go to state 28
     INT             shift and go to state 14
@@ -1003,16 +1010,16 @@ state 40
 
 state 41
 
-    (18) conditional -> IF expression THEN .
+    (19) conditional -> IF expression THEN .
 
-    $end            reduce using rule 18 (conditional -> IF expression THEN .)
+    $end            reduce using rule 19 (conditional -> IF expression THEN .)
 
 
 state 42
 
-    (19) while -> WHILE expression THEN .
+    (20) while -> WHILE expression THEN .
 
-    $end            reduce using rule 19 (while -> WHILE expression THEN .)
+    $end            reduce using rule 20 (while -> WHILE expression THEN .)
 
 
 state 43
@@ -1040,24 +1047,24 @@ state 43
 
 state 44
 
-    (25) expression -> LPAREN expression RPAREN .
+    (28) expression -> LPAREN expression RPAREN .
 
-    PLUS            reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    MULTIPLY        reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    LESSTHAN        reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    GREATERTHAN     reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    EQUALS          reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    NOTEQUALS       reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    THEN            reduce using rule 25 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 25 (expression -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    MULTIPLY        reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    LESSTHAN        reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    GREATERTHAN     reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    EQUALS          reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    NOTEQUALS       reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    THEN            reduce using rule 28 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 28 (expression -> LPAREN expression RPAREN .)
 
 
 state 45
 
-    (26) print -> PRINT LPAREN expression . RPAREN
+    (29) print -> PRINT LPAREN expression . RPAREN
     (10) expression -> expression . PLUS expression
     (11) expression -> expression . DIVIDE expression
     (12) expression -> expression . MULTIPLY expression
@@ -1080,9 +1087,9 @@ state 45
 
 state 46
 
-    (26) print -> PRINT LPAREN expression RPAREN .
+    (29) print -> PRINT LPAREN expression RPAREN .
 
-    $end            reduce using rule 26 (print -> PRINT LPAREN expression RPAREN .)
+    $end            reduce using rule 29 (print -> PRINT LPAREN expression RPAREN .)
 
 WARNING: 
 WARNING: Conflicts:
