@@ -11,10 +11,13 @@ FUNCTION_CALL = "FUNCTION_CALL"
 lnNum = 0
 env = {}
 
+
 #stacks
 goto = [] 
 state = []
 func_calls = []
+func_called = []
+func_return = []
 passed_args = []
 
 #Key Value pairs
@@ -55,6 +58,7 @@ tokens = [
     'WHILE',
     'THEN',
     'END',
+    'RETURN',
     'FUNC',
     'COMMA',
     'STRING',
@@ -165,6 +169,7 @@ def p_code(p):
     '''
      code : expression
           | var_assign
+          | return
           | print
           | empty
     '''
@@ -211,7 +216,7 @@ def p_function(p):
     if peek_stack(func_calls) == str(p[2]):
        
         #Function starts
-        func_calls.pop()
+        func_called.append(func_calls.pop())
         #Run args
         p[0] = p[4]
     else:
@@ -256,7 +261,17 @@ def p_end(p):
     global state
     if peek_stack(state) != -1:
         state.pop()
+        
     p[0] = p[1]
+
+def p_return(p):
+    '''
+    return : RETURN expression
+           | RETURN empty
+
+    '''
+    p[0] = ('return', p[2])
+
 
 def p_args(p):
     '''
@@ -277,7 +292,12 @@ def p_callfunc(p):
     '''
     callfunc : NAME LPAREN param RPAREN
     '''
-    p[0] = ('callfunc', p[1], p[3])
+    #If the result for the function was resolved, return the result
+    if peek_stack(func_return) != -1:
+        #Remove and return from funcEnv
+        p[0] = func_return.pop()
+    else:
+        p[0] = ('callfunc', p[1], p[3])
 
 
 def p_param(p):
@@ -340,6 +360,7 @@ parser = yacc.yacc()
 def run(p):
     global env
     global func_calls
+    global func_return
     global goto
     global lnNum
 
@@ -367,8 +388,8 @@ def run(p):
         elif p[0] == 'callfunc':
             
             
-            #append a goto back to the line where the function was call + 1
-            goto.append(lnNum + 1)
+            #append a goto back to the line where the function was called
+            goto.append(lnNum)
             #append the function's goto line number to the goto stack
             goto.append(funcGoto[p[1]]) 
             #append a new function call, immediately activates goto. Pass function name
@@ -396,6 +417,12 @@ def run(p):
                 env[argName1] = passed_args.pop()
             if argName2 not in env and argName2 is not None:
                 env[argName2] = passed_args.pop()
+
+        elif p[0] == 'return':
+            #exit function
+            state.append(WAIT_UNTIL_END)
+            #Append the expression result to the return stack
+            func_return.append(run(p[1]))
 
         elif p[0] == '=':
             env[p[1]] = run(p[2])
