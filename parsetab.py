@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEASSIGN COMMA DIVIDE ELSE END EQUALS FLOAT FUNC GREATERTHAN IF INT LESSTHAN LPAREN MINUS MULTIPLY NAME NOTEQUALS PLUS PRINT RPAREN STRING THEN WHILE\n    emoti : code\n          | conditional\n          | while\n          | end\n    \n     code : expression\n          | var_assign\n          | print\n          | empty\n    \n    var_assign : NAME ASSIGN expression\n    \n    expression : expression PLUS expression\n               | expression DIVIDE expression\n               | expression MULTIPLY expression\n               | expression MINUS expression\n               | expression LESSTHAN expression\n               | expression GREATERTHAN expression\n               | expression EQUALS expression\n               | expression NOTEQUALS expression\n    \n    function : FUNC NAME LPAREN param RPAREN THEN\n    \n    conditional : IF expression THEN\n    \n    while : WHILE expression THEN\n    \n    end : END\n    \n    param : param COMMA param\n    \n    param : expression\n    \n    expression : NAME\n    \n    expression : INT\n               | FLOAT\n               | STRING\n    \n    expression : LPAREN expression RPAREN\n    \n    print : PRINT LPAREN expression RPAREN\n    \n    empty :\n    '
+_lr_signature = 'leftPLUSMINUSleftMULTIPLYDIVIDEASSIGN COMMA DIVIDE ELSE END EQUALS FLOAT FUNC GREATERTHAN IF INT LESSTHAN LPAREN MINUS MULTIPLY NAME NOTEQUALS PLUS PRINT RPAREN STRING THEN WHILE\n    emoti : code\n          | conditional\n          | while\n          | function\n          | end\n    \n     code : expression\n          | var_assign\n          | print\n          | empty\n    \n    var_assign : NAME ASSIGN expression\n    \n    expression : expression PLUS expression\n               | expression DIVIDE expression\n               | expression MULTIPLY expression\n               | expression MINUS expression\n               | expression LESSTHAN expression\n               | expression GREATERTHAN expression\n               | expression EQUALS expression\n               | expression NOTEQUALS expression\n    \n    function : FUNC NAME LPAREN args RPAREN THEN\n    \n    conditional : IF expression THEN\n    \n    while : WHILE expression THEN\n    \n    end : END\n    \n    args : args COMMA args\n    \n    args : NAME\n         | empty\n    \n    callfunc : NAME LPAREN param RPAREN\n    \n    param : param COMMA param\n    \n    param : expression\n          | empty\n    \n    expression : NAME\n    \n    expression : INT\n               | FLOAT\n               | STRING\n               | callfunc\n    \n    expression : LPAREN expression RPAREN\n    \n    print : PRINT LPAREN expression RPAREN\n    \n    empty :\n    '
     
-_lr_action_items = {'IF':([0,],[10,]),'WHILE':([0,],[11,]),'END':([0,],[12,]),'NAME':([0,10,11,17,19,20,21,22,23,24,25,26,30,32,],[13,28,28,28,28,28,28,28,28,28,28,28,28,28,]),'INT':([0,10,11,17,19,20,21,22,23,24,25,26,30,32,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'FLOAT':([0,10,11,17,19,20,21,22,23,24,25,26,30,32,],[15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'STRING':([0,10,11,17,19,20,21,22,23,24,25,26,30,32,],[16,16,16,16,16,16,16,16,16,16,16,16,16,16,]),'LPAREN':([0,10,11,17,18,19,20,21,22,23,24,25,26,30,32,],[17,17,17,17,32,17,17,17,17,17,17,17,17,17,17,]),'PRINT':([0,],[18,]),'$end':([0,1,2,3,4,5,6,7,8,9,12,13,14,15,16,28,33,34,35,36,37,38,39,40,41,42,43,44,46,],[-30,0,-1,-2,-3,-4,-5,-6,-7,-8,-21,-24,-25,-26,-27,-24,-10,-11,-12,-13,-14,-15,-16,-17,-19,-20,-9,-28,-29,]),'PLUS':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[19,-24,-25,-26,-27,19,-24,19,19,-10,-11,-12,-13,19,19,19,19,19,-28,19,]),'DIVIDE':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[20,-24,-25,-26,-27,20,-24,20,20,20,-11,-12,20,20,20,20,20,20,-28,20,]),'MULTIPLY':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[21,-24,-25,-26,-27,21,-24,21,21,21,-11,-12,21,21,21,21,21,21,-28,21,]),'MINUS':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[22,-24,-25,-26,-27,22,-24,22,22,-10,-11,-12,-13,22,22,22,22,22,-28,22,]),'LESSTHAN':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[23,-24,-25,-26,-27,23,-24,23,23,-10,-11,-12,-13,23,23,23,23,23,-28,23,]),'GREATERTHAN':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[24,-24,-25,-26,-27,24,-24,24,24,-10,-11,-12,-13,24,24,24,24,24,-28,24,]),'EQUALS':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[25,-24,-25,-26,-27,25,-24,25,25,-10,-11,-12,-13,25,25,25,25,25,-28,25,]),'NOTEQUALS':([6,13,14,15,16,27,28,29,31,33,34,35,36,37,38,39,40,43,44,45,],[26,-24,-25,-26,-27,26,-24,26,26,-10,-11,-12,-13,26,26,26,26,26,-28,26,]),'ASSIGN':([13,],[30,]),'THEN':([14,15,16,27,28,29,33,34,35,36,37,38,39,40,44,],[-25,-26,-27,41,-24,42,-10,-11,-12,-13,-14,-15,-16,-17,-28,]),'RPAREN':([14,15,16,28,31,33,34,35,36,37,38,39,40,44,45,],[-25,-26,-27,-24,44,-10,-11,-12,-13,-14,-15,-16,-17,-28,46,]),}
+_lr_action_items = {'IF':([0,],[11,]),'WHILE':([0,],[12,]),'FUNC':([0,],[13,]),'END':([0,],[16,]),'NAME':([0,11,12,13,15,22,23,24,25,26,27,28,29,34,35,37,48,59,62,],[14,31,31,33,31,31,31,31,31,31,31,31,31,31,31,31,55,31,55,]),'INT':([0,11,12,15,22,23,24,25,26,27,28,29,34,35,37,59,],[17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,]),'FLOAT':([0,11,12,15,22,23,24,25,26,27,28,29,34,35,37,59,],[18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,]),'STRING':([0,11,12,15,22,23,24,25,26,27,28,29,34,35,37,59,],[19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,]),'LPAREN':([0,11,12,14,15,21,22,23,24,25,26,27,28,29,31,33,34,35,37,59,],[15,15,15,35,15,37,15,15,15,15,15,15,15,15,35,48,15,15,15,15,]),'PRINT':([0,],[21,]),'$end':([0,1,2,3,4,5,6,7,8,9,10,14,16,17,18,19,20,31,38,39,40,41,42,43,44,45,46,47,49,53,58,60,64,],[-37,0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-30,-22,-31,-32,-33,-34,-30,-11,-12,-13,-14,-15,-16,-17,-18,-20,-21,-10,-35,-26,-36,-19,]),'PLUS':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[22,-30,-31,-32,-33,-34,22,-30,22,22,-11,-12,-13,-14,22,22,22,22,22,22,-35,22,-26,]),'DIVIDE':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[23,-30,-31,-32,-33,-34,23,-30,23,23,23,-12,-13,23,23,23,23,23,23,23,-35,23,-26,]),'MULTIPLY':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[24,-30,-31,-32,-33,-34,24,-30,24,24,24,-12,-13,24,24,24,24,24,24,24,-35,24,-26,]),'MINUS':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[25,-30,-31,-32,-33,-34,25,-30,25,25,-11,-12,-13,-14,25,25,25,25,25,25,-35,25,-26,]),'LESSTHAN':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[26,-30,-31,-32,-33,-34,26,-30,26,26,-11,-12,-13,-14,26,26,26,26,26,26,-35,26,-26,]),'GREATERTHAN':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[27,-30,-31,-32,-33,-34,27,-30,27,27,-11,-12,-13,-14,27,27,27,27,27,27,-35,27,-26,]),'EQUALS':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[28,-30,-31,-32,-33,-34,28,-30,28,28,-11,-12,-13,-14,28,28,28,28,28,28,-35,28,-26,]),'NOTEQUALS':([7,14,17,18,19,20,30,31,32,36,38,39,40,41,42,43,44,45,49,51,53,54,58,],[29,-30,-31,-32,-33,-34,29,-30,29,29,-11,-12,-13,-14,29,29,29,29,29,29,-35,29,-26,]),'ASSIGN':([14,],[34,]),'THEN':([17,18,19,20,30,31,32,38,39,40,41,42,43,44,45,53,58,61,],[-31,-32,-33,-34,46,-30,47,-11,-12,-13,-14,-15,-16,-17,-18,-35,-26,64,]),'RPAREN':([17,18,19,20,31,35,36,38,39,40,41,42,43,44,45,48,50,51,52,53,54,55,56,57,58,59,62,63,65,],[-31,-32,-33,-34,-30,-37,53,-11,-12,-13,-14,-15,-16,-17,-18,-37,58,-28,-29,-35,60,-24,61,-25,-26,-37,-37,-27,-23,]),'COMMA':([17,18,19,20,31,35,38,39,40,41,42,43,44,45,48,50,51,52,53,55,56,57,58,59,62,63,65,],[-31,-32,-33,-34,-30,-37,-11,-12,-13,-14,-15,-16,-17,-18,-37,59,-28,-29,-35,-24,62,-25,-26,-37,-37,59,62,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'emoti':([0,],[1,]),'code':([0,],[2,]),'conditional':([0,],[3,]),'while':([0,],[4,]),'end':([0,],[5,]),'expression':([0,10,11,17,19,20,21,22,23,24,25,26,30,32,],[6,27,29,31,33,34,35,36,37,38,39,40,43,45,]),'var_assign':([0,],[7,]),'print':([0,],[8,]),'empty':([0,],[9,]),}
+_lr_goto_items = {'emoti':([0,],[1,]),'code':([0,],[2,]),'conditional':([0,],[3,]),'while':([0,],[4,]),'function':([0,],[5,]),'end':([0,],[6,]),'expression':([0,11,12,15,22,23,24,25,26,27,28,29,34,35,37,59,],[7,30,32,36,38,39,40,41,42,43,44,45,49,51,54,51,]),'var_assign':([0,],[8,]),'print':([0,],[9,]),'empty':([0,35,48,59,62,],[10,52,57,52,57,]),'callfunc':([0,11,12,15,22,23,24,25,26,27,28,29,34,35,37,59,],[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,]),'param':([35,59,],[50,63,]),'args':([48,62,],[56,65,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,34 +27,41 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> emoti","S'",1,None,None,None),
-  ('emoti -> code','emoti',1,'p_emoticode','emoticode.py',152),
-  ('emoti -> conditional','emoti',1,'p_emoticode','emoticode.py',153),
-  ('emoti -> while','emoti',1,'p_emoticode','emoticode.py',154),
-  ('emoti -> end','emoti',1,'p_emoticode','emoticode.py',155),
-  ('code -> expression','code',1,'p_code','emoticode.py',161),
-  ('code -> var_assign','code',1,'p_code','emoticode.py',162),
-  ('code -> print','code',1,'p_code','emoticode.py',163),
-  ('code -> empty','code',1,'p_code','emoticode.py',164),
-  ('var_assign -> NAME ASSIGN expression','var_assign',3,'p_var_assign','emoticode.py',178),
-  ('expression -> expression PLUS expression','expression',3,'p_expression','emoticode.py',184),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression','emoticode.py',185),
-  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','emoticode.py',186),
-  ('expression -> expression MINUS expression','expression',3,'p_expression','emoticode.py',187),
-  ('expression -> expression LESSTHAN expression','expression',3,'p_expression','emoticode.py',188),
-  ('expression -> expression GREATERTHAN expression','expression',3,'p_expression','emoticode.py',189),
-  ('expression -> expression EQUALS expression','expression',3,'p_expression','emoticode.py',190),
-  ('expression -> expression NOTEQUALS expression','expression',3,'p_expression','emoticode.py',191),
-  ('function -> FUNC NAME LPAREN param RPAREN THEN','function',6,'p_function','emoticode.py',204),
-  ('conditional -> IF expression THEN','conditional',3,'p_conditional','emoticode.py',216),
-  ('while -> WHILE expression THEN','while',3,'p_while','emoticode.py',228),
-  ('end -> END','end',1,'p_end','emoticode.py',244),
-  ('param -> param COMMA param','param',3,'p_param_multi','emoticode.py',254),
-  ('param -> expression','param',1,'p_param_single','emoticode.py',260),
-  ('expression -> NAME','expression',1,'p_expression_var','emoticode.py',266),
-  ('expression -> INT','expression',1,'p_expression_int_float_string','emoticode.py',273),
-  ('expression -> FLOAT','expression',1,'p_expression_int_float_string','emoticode.py',274),
-  ('expression -> STRING','expression',1,'p_expression_int_float_string','emoticode.py',275),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_parenthesis','emoticode.py',282),
-  ('print -> PRINT LPAREN expression RPAREN','print',4,'p_print','emoticode.py',289),
-  ('empty -> <empty>','empty',0,'p_empty','emoticode.py',298),
+  ('emoti -> code','emoti',1,'p_emoticode','emoticode.py',154),
+  ('emoti -> conditional','emoti',1,'p_emoticode','emoticode.py',155),
+  ('emoti -> while','emoti',1,'p_emoticode','emoticode.py',156),
+  ('emoti -> function','emoti',1,'p_emoticode','emoticode.py',157),
+  ('emoti -> end','emoti',1,'p_emoticode','emoticode.py',158),
+  ('code -> expression','code',1,'p_code','emoticode.py',164),
+  ('code -> var_assign','code',1,'p_code','emoticode.py',165),
+  ('code -> print','code',1,'p_code','emoticode.py',166),
+  ('code -> empty','code',1,'p_code','emoticode.py',167),
+  ('var_assign -> NAME ASSIGN expression','var_assign',3,'p_var_assign','emoticode.py',181),
+  ('expression -> expression PLUS expression','expression',3,'p_expression','emoticode.py',187),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression','emoticode.py',188),
+  ('expression -> expression MULTIPLY expression','expression',3,'p_expression','emoticode.py',189),
+  ('expression -> expression MINUS expression','expression',3,'p_expression','emoticode.py',190),
+  ('expression -> expression LESSTHAN expression','expression',3,'p_expression','emoticode.py',191),
+  ('expression -> expression GREATERTHAN expression','expression',3,'p_expression','emoticode.py',192),
+  ('expression -> expression EQUALS expression','expression',3,'p_expression','emoticode.py',193),
+  ('expression -> expression NOTEQUALS expression','expression',3,'p_expression','emoticode.py',194),
+  ('function -> FUNC NAME LPAREN args RPAREN THEN','function',6,'p_function','emoticode.py',207),
+  ('conditional -> IF expression THEN','conditional',3,'p_conditional','emoticode.py',224),
+  ('while -> WHILE expression THEN','while',3,'p_while','emoticode.py',236),
+  ('end -> END','end',1,'p_end','emoticode.py',252),
+  ('args -> args COMMA args','args',3,'p_args','emoticode.py',262),
+  ('args -> NAME','args',1,'p_args_single','emoticode.py',270),
+  ('args -> empty','args',1,'p_args_single','emoticode.py',271),
+  ('callfunc -> NAME LPAREN param RPAREN','callfunc',4,'p_callfunc','emoticode.py',277),
+  ('param -> param COMMA param','param',3,'p_param','emoticode.py',284),
+  ('param -> expression','param',1,'p_params_single','emoticode.py',290),
+  ('param -> empty','param',1,'p_params_single','emoticode.py',291),
+  ('expression -> NAME','expression',1,'p_expression_var','emoticode.py',298),
+  ('expression -> INT','expression',1,'p_expression_data','emoticode.py',306),
+  ('expression -> FLOAT','expression',1,'p_expression_data','emoticode.py',307),
+  ('expression -> STRING','expression',1,'p_expression_data','emoticode.py',308),
+  ('expression -> callfunc','expression',1,'p_expression_data','emoticode.py',309),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_parenthesis','emoticode.py',316),
+  ('print -> PRINT LPAREN expression RPAREN','print',4,'p_print','emoticode.py',323),
+  ('empty -> <empty>','empty',0,'p_empty','emoticode.py',332),
 ]

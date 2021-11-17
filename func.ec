@@ -1,7 +1,9 @@
+
 #️⃣ sumFunc (x, y) 👶
     sum = x + y
-    ↩️ sum
+    🖨️("Hello func!")
+    💬↩️ sum
 
 💀
 
-sum = sumFunc(1, 2)
+sumFunc(4, 2)

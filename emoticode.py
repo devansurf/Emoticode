@@ -5,6 +5,7 @@ import sys
 
 #Constants
 WAIT_UNTIL_END = "WAIT_UNTIL_END"
+FUNCTION_CALL = "FUNCTION_CALL"
 #Memory
 
 lnNum = 0
@@ -14,6 +15,7 @@ env = {}
 goto = [] 
 state = []
 func_calls = []
+passed_args = []
 
 #Key Value pairs
 lnGoto = {}             #Key -> trigger line Num, Value -> goto Line number
@@ -133,7 +135,7 @@ def t_NEWLINE(t):
     #print("line number " + str(t.lexer.lineno))
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print("Illegal character on line "+ str(t.lexer.lineno) + " '%s'" % t.value[0])
     t.lexer.skip(1)
 
 lexer = lex.lex()
@@ -152,6 +154,7 @@ def p_emoticode(p):
     emoti : code
           | conditional
           | while
+          | function
           | end
     '''
     p[0] = p[1]
@@ -201,15 +204,20 @@ def p_expression(p):
 
 def p_function(p):
     '''
-    function : FUNC NAME LPAREN param RPAREN THEN
+    function : FUNC NAME LPAREN args RPAREN THEN
     '''
     #Check if there is a request to run the function
     if peek_stack(func_calls) == str(p[2]):
-        print("do something")
+       
+        #Function starts
+        func_calls.pop()
+        #Run args
+        p[0] = p[4]
     else:
         #register the function in the dictionary
         funcGoto[str(p[2])] = lnNum
         state.append(WAIT_UNTIL_END)
+
 
 def p_conditional(p):
     '''
@@ -227,7 +235,6 @@ def p_while(p):
     '''
     while : WHILE expression THEN
     '''
-
     global state
     global goto
     #If false, skip the loop
@@ -239,6 +246,7 @@ def p_while(p):
         goto.append(lnNum)
         p[0] = None
 
+
 def p_end(p):  
     '''
     end : END
@@ -249,17 +257,41 @@ def p_end(p):
         state.pop()
     p[0] = p[1]
 
-def p_param_multi(p):
+def p_args(p):
+    '''
+    args : args COMMA args
+    '''
+    #needs existing variables names to be passed as args
+    # if not create new vars with the pass values
+    p[0] = ('args', p[1], p[3])
+
+def p_args_single(p):
+    '''
+    args : NAME
+         | empty
+    '''
+    p[0] = ('args', p[1], None)
+
+def p_callfunc(p):
+    '''
+    callfunc : NAME LPAREN param RPAREN
+    '''
+    p[0] = ('callfunc', p[1], p[3])
+
+
+def p_param(p):
     '''
     param : param COMMA param
     '''
     p[0] = ('param', p[1], p[3])
-    
-def p_param_single(p):
+
+def p_params_single(p):
     '''
     param : expression
+          | empty
     '''
-    p[0] = ('param', p[1])
+    p[0] = ('param', p[1], None)
+
 
 def p_expression_var(p):
     '''
@@ -268,11 +300,13 @@ def p_expression_var(p):
     #Expression will be evaluated to whatever the value is
     p[0] = ('var', p[1])
 
-def p_expression_int_float_string(p):
+
+def p_expression_data(p):
     '''
     expression : INT
                | FLOAT
                | STRING
+               | callfunc
     '''
     #Expression will be evaluated to whatever the value is
     p[0] = p[1]
@@ -304,6 +338,10 @@ parser = yacc.yacc()
 
 def run(p):
     global env
+    global func_calls
+    global goto
+    global lnNum
+
     #runs parse
     if type(p) == tuple:
         if p[0] == '+':
@@ -322,9 +360,39 @@ def run(p):
             return run(p[1]) == run (p[2])
         elif p[0] == '!=':
             return run(p[1]) != run (p[2])
-
         elif p[0] == 'print':
             return print("Output: " + str(run(p[1])))
+
+        elif p[0] == 'callfunc':
+            
+            
+            #append a goto back to the line where the function was call + 1
+            goto.append(lnNum + 1)
+            #append the function's goto line number to the goto stack
+            goto.append(funcGoto[p[1]]) 
+            #append a new function call, immediately activates goto. Pass function name
+            func_calls.append(p[1])
+            #Run the params
+            run(p[2])
+
+        elif p[0] == "param":
+            #last param inserted first, pops last
+            param2 = run(p[2])
+            param1 = run(p[1])
+
+            if param2 is not None:
+                passed_args.append(param2)
+            if param1 is not None:
+                passed_args.append(param1)
+            
+
+        elif p[0] == "args":
+            argName1 = run(p[1])
+            argName2 = run(p[2])
+            if argName1 not in env and argName1 is not None:
+                env[argName1] = passed_args.pop()
+            if argName2 not in env and argName2 is not None:
+                env[argName2] = passed_args.pop()
 
         elif p[0] == '=':
             env[p[1]] = run(p[2])
@@ -346,10 +414,15 @@ with open(filename,"r") as f:
     data = f.readlines() # readlines() returns a list of items, each item is a line in your file
   
     while lnNum < len(data):
+        
             
         result = parser.parse(data[lnNum])
         run(result)
         lnNum += 1
+
+        if peek_stack(func_calls) != -1: #if a function was called, jump to it
+            #TODO Functions are skipped (like theyre supposed to), but do not get called yet!
+            lnNum = goto.pop()
 
         #Start of GOTO logic -> handles jumps between lines
         gotoLn = peek_stack(goto)
@@ -361,9 +434,9 @@ with open(filename,"r") as f:
                 if peek_stack(state) != -1:
                     state.pop()
                 else: #modify lnNum, start from the goto line
-                    lnNum = gotoLn
-                    goto.pop()
-        
+                    lnNum = goto.pop()
+                  
+          
             
     #Potential logic to detect blocks (incomplete)
    # for lnNum in range(goto.pop(), p.lineno(1)):
