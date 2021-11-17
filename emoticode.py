@@ -81,6 +81,7 @@ t_IF = r'\🤔'
 t_THEN = r'\👶'
 t_END = r'\💀'
 t_FUNC = r'\#️⃣'
+t_RETURN = r'\↩️'
 
 t_ignore = r' '
 
@@ -380,6 +381,7 @@ def run(p):
             param2 = run(p[2])
             param1 = run(p[1])
 
+            #Pass none empty parameters
             if param2 is not None:
                 passed_args.append(param2)
             if param1 is not None:
@@ -389,6 +391,7 @@ def run(p):
         elif p[0] == "args":
             argName1 = run(p[1])
             argName2 = run(p[2])
+            #Pass none empty arguments, create new vars
             if argName1 not in env and argName1 is not None:
                 env[argName1] = passed_args.pop()
             if argName2 not in env and argName2 is not None:
