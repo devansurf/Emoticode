@@ -7,11 +7,11 @@ Emoticons and their Representation:
 
 👶🏾  Open Statement \
 ☠️ 	Close Statement \
-🔄   For \
+🔄   While \
 🤔 	If \
-👁‍🗨	While \
+👁‍🗨	For \
 🔢	 Int \
-💬	String \
+💬	Comment \
 📋	List \
 [To Be Determined]	Float \
 ❓	Bool \
