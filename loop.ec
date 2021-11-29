@@ -17,12 +17,11 @@ iterations = 0
 
             🔁 y > 0 👶
                 iterations = iterations + 1
-                y = y -1      
-            💀   
-             🖨️("Why hello")   
-             🖨️("This is a multi-line print for testing purposes")
+                y = y -1  
+                🖨️(iterations)    
+            💀      
         💀   
     💀
 💀
-
+🖨️("The number of iterations are: ") 
 🖨️(iterations)

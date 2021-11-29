@@ -1,13 +1,15 @@
 
-#️⃣ sumFunc (x, y) 👶
-    sum = x + y
+#️⃣ sumFunc (x, y, z) 👶
+    sum = x + y + z
+
     🖨️("Hello from inside the function!")
-    💬 Make sure to always return! (for now)
+
+    💬 Make sure to always return!
     ↩️ sum
 💀
 
 🖨️("Hello, this is my sum function!")
 
-mySum = sumFunc(4, 2)
-🖨️("My sum is: ")
-🖨️(mySum)
+🖨️(sumFunc(4, 2, 6))
+
+

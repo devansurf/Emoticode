@@ -11,7 +11,6 @@ FUNCTION_CALL = "FUNCTION_CALL"
 lnNum = 0
 env = {}
 
-
 #stacks
 goto = [] 
 state = []
@@ -21,12 +20,11 @@ func_return = []
 passed_args = []
 
 #Key Value pairs
-lnGoto = {}             #Key -> trigger line Num, Value -> goto Line number
 funcGoto = {}           #Key -> Func Name, Value -> starting line number
 
 #-- Lexical Analysis --
 
-DEBUG = T
+DEBUG = False
 prompt = "Enter < 1 > for terminal\nEnter < 2 > for running file\n"
 
 def peek_stack(stack):
@@ -79,13 +77,13 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r'\,'
 
-t_PRINT = r'\🖨️'
 t_WHILE = r'\🔁'
 t_IF = r'\🤔'
 t_THEN = r'\👶'
 t_END = r'\💀'
 t_FUNC = r'\#️⃣'
 t_RETURN = r'\↩️'
+t_PRINT = r'\🖨️'
 
 t_ignore = r' '
 
@@ -137,7 +135,6 @@ def t_COMMENT(t):
 def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    #print("line number " + str(t.lexer.lineno))
 
 def t_error(t):
     print("Illegal character on line "+ str(t.lexer.lineno) + " '%s'" % t.value[0])
@@ -146,7 +143,7 @@ def t_error(t):
 lexer = lex.lex()
 
 
-#'precedence' removes ambiguity, make sure it is written exactly as shown
+#'precedence' removes ambiguity
 precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'MULTIPLY', 'DIVIDE')
@@ -202,8 +199,7 @@ def p_expression(p):
     '''
     # line  = p.lineno(2)        # line number of the PLUS token
     # index = p.lexpos(2)        # Position of the PLUS token
-    # print("line number is: " + str(line))
-    # print("lex pos is: " + str(index))
+ 
     #expression tree
     p[0] = (p[2], p[1], p[3])
 
@@ -213,29 +209,14 @@ def p_function(p):
     function : FUNC NAME LPAREN args RPAREN THEN
     '''
     #Check if there is a request to run the function
-    if peek_stack(func_calls) == str(p[2]):
-       
-        #Function starts
-        func_called.append(func_calls.pop())
-        #Run args
-        p[0] = p[4]
-    else:
-        #register the function in the dictionary
-        funcGoto[str(p[2])] = lnNum
-        state.append(WAIT_UNTIL_END)
-
+    p[0] = ('function', p[2], p[4])
 
 def p_conditional(p):
     '''
     conditional : IF expression THEN
     '''
 
-    global state
-    #If WAIT_UNTIL_END before conditional, then add to the stack and ignore this step
-    if not run(p[2]) or peek_stack(state) == WAIT_UNTIL_END:
-        state.append(WAIT_UNTIL_END) 
-    else:
-        p[0] = None
+    p[0] = ('cond', p[2])
 
 def p_while(p):
     '''
@@ -244,14 +225,7 @@ def p_while(p):
     global state
     global goto
     #If false, skip the loop
-    if not run(p[2]) or peek_stack(state) == WAIT_UNTIL_END:
-        state.append(WAIT_UNTIL_END)
-    #If true, run the block and run the check again
-    else: 
-        #Add while line# to goto stack for later reference
-        goto.append(lnNum)
-        p[0] = None
-
+    p[0] = ('while', p[2])
 
 def p_end(p):  
     '''
@@ -354,7 +328,6 @@ def p_empty(p):
     '''
     p[0] = None
 
-#Start of input
 parser = yacc.yacc()
 
 def run(p):
@@ -383,11 +356,35 @@ def run(p):
         elif p[0] == '!=':
             return run(p[1]) != run (p[2])
         elif p[0] == 'print':
-            return print("Output: " + str(run(p[1])))
+            output = str(run(p[1]))
+            if output != "None":
+                return print(">> " + output)
 
+        elif p[0] == 'while':
+            if not run(p[1]) or peek_stack(state) == WAIT_UNTIL_END:
+                #If true, run the block and run the check again
+                state.append(WAIT_UNTIL_END)
+            else: 
+                #Add while line# to goto stack for later reference
+                goto.append(lnNum)
+
+        elif p[0] == 'function':
+            if peek_stack(func_calls) == str(p[1]):
+                #Function starts
+                func_called.append(func_calls.pop())
+                #Run args
+                run(p[2])
+            else:
+                #register the function in the dictionary
+                funcGoto[str(p[1])] = lnNum
+                state.append(WAIT_UNTIL_END)
+
+        elif p[0] == 'cond':
+            #If WAIT_UNTIL_END before conditional, then add to the stack and ignore this step
+            if not run(p[1]) or peek_stack(state) == WAIT_UNTIL_END:
+                state.append(WAIT_UNTIL_END) 
+    
         elif p[0] == 'callfunc':
-            
-            
             #append a goto back to the line where the function was called
             goto.append(lnNum)
             #append the function's goto line number to the goto stack
@@ -437,21 +434,20 @@ def run(p):
         return p
 
 
-filename = input("Input the file name (Ex: test.ec , loop.ec):\n")
+filename = input("Input the file name (Ex: test.ec , loop.ec, func.ec):\n")
 if DEBUG:
     print("\nDEBUG IS ON.\n")
 with open(filename,"r") as f:
-    data = f.readlines() # readlines() returns a list of items, each item is a line in your file
+    # readlines() returns a list of items, each item is a line in your file
+    data = f.readlines() 
   
     while lnNum < len(data):
         
-            
         result = parser.parse(data[lnNum])
         run(result)
         lnNum += 1
 
         if peek_stack(func_calls) != -1: #if a function was called, jump to it
-            #TODO Functions are skipped (like theyre supposed to), but do not get called yet!
             lnNum = goto.pop()
 
         #Start of GOTO logic -> handles jumps between lines
@@ -463,14 +459,8 @@ with open(filename,"r") as f:
                 #Resolve any WAIT states before goto's
                 if peek_stack(state) != -1:
                     state.pop()
-                else: #modify lnNum, start from the goto line
+                else: 
+                    #modify lnNum, start from the goto line
                     lnNum = goto.pop()
                   
           
-            
-    #Potential logic to detect blocks (incomplete)
-   # for lnNum in range(goto.pop(), p.lineno(1)):
-        #     lexer.input(data[lnNum])
-        #     while 1:
-        #         tok = lexer.token()
-        #         if not tok: break
