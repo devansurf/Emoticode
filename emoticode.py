@@ -266,7 +266,7 @@ def p_callfunc(p):
     callfunc : NAME LPAREN param RPAREN
     '''
     #If the result for the function was resolved, return the result
-    if peek_stack(func_return) != -1:
+    if peek_stack(func_return) != -1 and peek_stack(func_return) is not None:
         #Remove and return from funcEnv
         p[0] = func_return.pop()
     else:
@@ -396,7 +396,7 @@ def run(p):
             #append a new function call, immediately activates goto. Pass function name
             func_calls.append(p[1])
             #Run the params
-            run(p[2])
+            return run(p[2])
 
         elif p[0] == "param":
             #last param inserted first, pops last
@@ -468,15 +468,19 @@ with open(filename,"r") as f:
         run(result)
         lnNum += 1
 
+        # print(goto)
+
+        prevLn = peek_stack(prev)
+        peekBlock = peek_stack(func_blockLevel)
+        gotoLn = peek_stack(goto)
 
         if peek_stack(func_calls) != -1: #if a function was called, jump to it
             lnNum = goto.pop()
-
         #Start of GOTO logic -> handles jumps between lines
-        gotoLn = peek_stack(goto)
+       
       
         #Handle loops
-        if result and gotoLn > 0:
+        elif result and gotoLn > 0:
             #Goto's trigger on END when inside a loop
             if result[0] == 'end':
                 #Resolve any WAIT states before goto's
@@ -487,16 +491,13 @@ with open(filename,"r") as f:
                     lnNum = goto.pop()
 
         #Handle functions
-        prevLn = peek_stack(prev)
-        peekBlock = peek_stack(func_blockLevel)
-        if result and prevLn > 0:
+        
+        elif result and prevLn > 0:
             #If exited block level, that means function was exited
             if blockLevel < peekBlock:
                 lnNum = prev.pop()
                 func_blockLevel.pop()
                 #release variables in function scope
-                envStack.pop()
-            
-                    
+                envStack.pop()     
                   
           
