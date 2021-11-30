@@ -9,14 +9,17 @@ FUNCTION_CALL = "FUNCTION_CALL"
 #Memory
 
 lnNum = 0
+blockLevel = 0
 env = {}
 
 #stacks
 goto = [] 
+prev = []
 state = []
+envStack = []
 func_calls = []
-func_called = []
 func_return = []
+func_blockLevel = []
 passed_args = []
 
 #Key Value pairs
@@ -232,11 +235,7 @@ def p_end(p):
     end : END
     '''
 
-    global state
-    if peek_stack(state) != -1:
-        state.pop()
-        
-    p[0] = p[1]
+    p[0] = ('end', p[1])
 
 def p_return(p):
     '''
@@ -332,6 +331,7 @@ parser = yacc.yacc()
 
 def run(p):
     global env
+    global blockLevel
     global func_calls
     global func_return
     global goto
@@ -340,27 +340,28 @@ def run(p):
     #runs parse
     if type(p) == tuple:
         if p[0] == '+':
-            return run(p[1]) + run (p[2])
+            return run(p[1]) + run(p[2])
         elif p[0] == '-':
-            return run(p[1]) - run (p[2])
+            return run(p[1]) - run(p[2])
         elif p[0] == '*':
-            return run(p[1]) * run (p[2])
+            return run(p[1]) * run(p[2])
         elif p[0] == '/':
-            return run(p[1]) / run (p[2])
+            return run(p[1]) / run(p[2])
         elif p[0] == '<':
-            return run(p[1]) < run (p[2])
+            return run(p[1]) < run(p[2])
         elif p[0] == '>':
-            return run(p[1]) > run (p[2])
+            return run(p[1]) > run(p[2])
         elif p[0] == '==':
-            return run(p[1]) == run (p[2])
+            return run(p[1]) == run(p[2])
         elif p[0] == '!=':
-            return run(p[1]) != run (p[2])
+            return run(p[1]) != run(p[2])
         elif p[0] == 'print':
             output = str(run(p[1]))
             if output != "None":
                 return print(">> " + output)
 
         elif p[0] == 'while':
+            blockLevel +=1 
             if not run(p[1]) or peek_stack(state) == WAIT_UNTIL_END:
                 #If true, run the block and run the check again
                 state.append(WAIT_UNTIL_END)
@@ -369,9 +370,11 @@ def run(p):
                 goto.append(lnNum)
 
         elif p[0] == 'function':
+            blockLevel += 1
             if peek_stack(func_calls) == str(p[1]):
                 #Function starts
-                func_called.append(func_calls.pop())
+                func_blockLevel.append(blockLevel)
+                func_calls.pop()
                 #Run args
                 run(p[2])
             else:
@@ -381,12 +384,13 @@ def run(p):
 
         elif p[0] == 'cond':
             #If WAIT_UNTIL_END before conditional, then add to the stack and ignore this step
+            blockLevel += 1
             if not run(p[1]) or peek_stack(state) == WAIT_UNTIL_END:
                 state.append(WAIT_UNTIL_END) 
     
         elif p[0] == 'callfunc':
             #append a goto back to the line where the function was called
-            goto.append(lnNum)
+            prev.append(lnNum)
             #append the function's goto line number to the goto stack
             goto.append(funcGoto[p[1]]) 
             #append a new function call, immediately activates goto. Pass function name
@@ -407,29 +411,46 @@ def run(p):
             
 
         elif p[0] == "args":
+            #create vars in a scope
             argName1 = run(p[1])
+            if argName1 is not None:
+                envStack.append({argName1 : passed_args.pop()})
+
             argName2 = run(p[2])
-            #Pass none empty arguments, create new vars
-            if argName1 not in env and argName1 is not None:
-                env[argName1] = passed_args.pop()
-            if argName2 not in env and argName2 is not None:
-                env[argName2] = passed_args.pop()
+            if argName2 is not None:
+                envStack.append({argName2 : passed_args.pop()})
 
         elif p[0] == 'return':
             #exit function
-            state.append(WAIT_UNTIL_END)
+            blockLevel = peek_stack(func_blockLevel)-1
             #Append the expression result to the return stack
             func_return.append(run(p[1]))
+
+        elif p[0] == 'end':
+            blockLevel -= 1
+            if peek_stack(state) != -1:
+                state.pop()
+            run(p[1])
 
         elif p[0] == '=':
             env[p[1]] = run(p[2])
             if DEBUG:
                 print(env)
+                
         elif p[0] == 'var':
-            if p[1] not in env:
-                return 'Undeclared variable found!'
-            else:
+            envScope = peek_stack(envStack)
+            
+            #Prioritize global vars
+            if p[1] in env:
                 return env[p[1]]
+
+            elif envScope != -1:
+                if p[1] in envScope:
+                    #print(envScope[p[1]])
+                    #only look at variables within the top of the stack (scope)
+                    return envScope[p[1]]
+            else:
+                return 0
     else:
         return p
 
@@ -447,20 +468,35 @@ with open(filename,"r") as f:
         run(result)
         lnNum += 1
 
+
         if peek_stack(func_calls) != -1: #if a function was called, jump to it
             lnNum = goto.pop()
 
         #Start of GOTO logic -> handles jumps between lines
         gotoLn = peek_stack(goto)
+      
+        #Handle loops
         if result and gotoLn > 0:
-            #Goto's trigger on END
-            if result[0] == "💀":
-
+            #Goto's trigger on END when inside a loop
+            if result[0] == 'end':
                 #Resolve any WAIT states before goto's
                 if peek_stack(state) != -1:
                     state.pop()
                 else: 
                     #modify lnNum, start from the goto line
                     lnNum = goto.pop()
+
+        #Handle functions
+        prevLn = peek_stack(prev)
+        peekBlock = peek_stack(func_blockLevel)
+        if result and prevLn > 0:
+            #If exited block level, that means function was exited
+            if blockLevel < peekBlock:
+                lnNum = prev.pop()
+                func_blockLevel.pop()
+                #release variables in function scope
+                envStack.pop()
+            
+                    
                   
           

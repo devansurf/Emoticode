@@ -1,6 +1,6 @@
 
-#️⃣ sumFunc (x, y, z) 👶
-    sum = x + y + z
+#️⃣ sumFunc (x) 👶
+    sum = x + 1
 
     🖨️("Hello from inside the function!")
 
@@ -10,6 +10,6 @@
 
 🖨️("Hello, this is my sum function!")
 
-🖨️(sumFunc(4, 2, 6))
+🖨️(sumFunc(4))
 
 
