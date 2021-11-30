@@ -10,14 +10,9 @@ Emoticons and their Representation:
 🔄   While \
 🤔 	If \
 👁‍🗨	For \
-🔢	 Int \
 💬	Comment \
-📋	List \
-[To Be Determined]	Float \
-❓	Bool \
-🧮	Array \
 ↪️	Return \
 🖨 	Print \
-📤	Max \
-📥	Min \
+📤	Ceiling \
+📥	Floor 
 	
