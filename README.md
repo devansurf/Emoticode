@@ -7,17 +7,12 @@ Emoticons and their Representation:
 
 👶🏾  Open Statement \
 ☠️ 	Close Statement \
-🔄   For \
+🔄   While \
 🤔 	If \
-👁‍🗨	While \
-🔢	 Int \
-💬	String \
-📋	List \
-[To Be Determined]	Float \
-❓	Bool \
-🧮	Array \
+👁‍🗨	For \
+💬	Comment \
 ↪️	Return \
 🖨 	Print \
-📤	Max \
-📥	Min \
+📤	Ceiling \
+📥	Floor 
 	
