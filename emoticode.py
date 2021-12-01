@@ -1,6 +1,7 @@
 from re import T
 import ply.lex as lex
 import ply.yacc as yacc
+import math
 import sys
 
 #Constants
@@ -38,7 +39,7 @@ def peek_stack(stack):
 
 #Convert inputs into tokens, run logic and compare valid syntax
 reserved = {
-    'else' : 'ELSE',
+    #'else' : 'ELSE',
 }
 tokens = [
     'INT',
@@ -64,6 +65,8 @@ tokens = [
     'COMMA',
     'STRING',
     'PRINT',
+    'FLOOR',
+    'CEILING',
 ]+ list(reserved.values())
 #PLY looks for the the syntax 't_' to register what a token will look like
 
@@ -87,6 +90,8 @@ t_END = r'\💀'
 t_FUNC = r'\#️⃣'
 t_RETURN = r'\↩️'
 t_PRINT = r'\🖨️'
+t_FLOOR = r'\📥'
+t_CEILING = r'\📤'
 
 t_ignore = r' '
 
@@ -301,6 +306,8 @@ def p_expression_data(p):
                | FLOAT
                | STRING
                | callfunc
+               | floor
+               | ceiling
     '''
     #Expression will be evaluated to whatever the value is
     p[0] = p[1]
@@ -317,6 +324,19 @@ def p_print(p):
     print : PRINT LPAREN expression RPAREN
     '''
     p[0] = ('print', p[3])
+
+def p_floor(p):
+    '''
+    floor : FLOOR LPAREN expression RPAREN
+    '''
+    p[0]= ('floor', p[3])
+
+def p_ceiling(p):
+    '''
+    ceiling : CEILING LPAREN expression RPAREN
+    '''
+    p[0]= ('ceiling', p[3])
+
 
 def p_error(p):
     print("Syntax Error Found!")
@@ -359,6 +379,12 @@ def run(p):
             output = str(run(p[1]))
             if output != "None":
                 return print(">> " + output)
+
+        elif p[0]=='floor':
+            return math.floor(run(p[1]))
+        
+        elif p[0]=='ceiling':
+            return math.ceil(run(p[1]))
 
         elif p[0] == 'while':
             blockLevel +=1 
@@ -455,7 +481,7 @@ def run(p):
         return p
 
 
-filename = input("Input the file name (Ex: test.ec , loop.ec, func.ec):\n")
+filename = input("Input the file name (Ex: test.ec , loop.ec, func.ec, countdown.ec):\n")
 if DEBUG:
     print("\nDEBUG IS ON.\n")
 with open(filename,"r") as f:

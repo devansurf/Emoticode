@@ -18,3 +18,19 @@ myString = "Hello world"
     🖨️(z)
 💀
 
+dante = 0
+
+🖨️("EMOTICODE CABRON JAJA")
+
+
+    🔁 (dante < 10) 👶
+    🖨️("helloworld")
+    dante = dante + 1
+    💀
+
+
+
+
+
+
+

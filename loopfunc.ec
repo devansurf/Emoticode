@@ -18,12 +18,13 @@
                 🔁 y > 0 👶
                     iterations = iterations + 1
                     y = y -1  
-                    🖨️(iterations)    
+                    🖨️(iterations) 
+                    
                 💀      
             💀   
         💀
     💀
-    ↩️ 
+    ↩️ 0
 💀
 
 loopFunc(12)

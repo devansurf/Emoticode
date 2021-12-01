@@ -1,4 +1,4 @@
- 💬 My recursive countdown function!
+💬 My recursive countdown function!
 
 #️⃣ countDown (n) 👶
     🖨️(n)
@@ -9,6 +9,6 @@
 💀
 
 
-🖨️(countDown(10))
+🖨️(countDown(100))
 
 
